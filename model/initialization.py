@@ -11,7 +11,8 @@ from pathos.multiprocessing import ProcessingPool
 
 path = os.getcwd()
 
-rootpath = '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Agent-based-Model/'
+#rootpath = '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Agent-based-Model/'
+rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'
 
 survey = pd.read_csv(rootpath+'data/survey/gps_final_scored_phase3.csv')
 survey['PEOPLE_TOT_3PLUS']=survey['PEOPLE_TOT_3PLUS'].fillna(0)
@@ -51,6 +52,7 @@ household_demographics = household_demographics.set_index('CASE_ID')
 
 
 filenames= glob.glob(rootpath+'data/initialization_subsets_24/*.csv')
+print(filenames)
 
 #definition of initialize function 
 def initialize(file):
