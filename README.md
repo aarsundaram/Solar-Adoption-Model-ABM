@@ -5,3 +5,4 @@
 
 Coded entirely using MESA + NetworkX 
 
+![image](https://user-images.githubusercontent.com/55314141/123116455-36115380-d441-11eb-8d3d-26e28b801ee9.png)
