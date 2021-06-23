@@ -11,8 +11,8 @@ from pathos.multiprocessing import ProcessingPool
 
 path = os.getcwd()
 
-rootpath = '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'
-#rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'
+#rootpath = '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'
+rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'
 
 survey = pd.read_csv(rootpath+'data/survey/gps_final_scored_phase3.csv')
 survey['PEOPLE_TOT_3PLUS']=survey['PEOPLE_TOT_3PLUS'].fillna(0)
@@ -121,7 +121,7 @@ def initialize(file):
     df.to_csv(rootpath+f'data/init_output/{df_name}_initialized.csv')
     print(f'finished exporting the initialized file of {df_name}.csv')
 
-pool = ProcessingPool(4)
+pool = ProcessingPool(8)
 results = pool.map(initialize,filenames)
 
 
