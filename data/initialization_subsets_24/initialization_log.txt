@@ -1,0 +1,528 @@
+(networksci) Aarthis-MacBook-Air:model rtseinstein$ python3 initialization.py 
+initialization.py:48: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  household_demographics['case_id']= new_caseids
+initialization.py:49: SettingWithCopyWarning: 
+A value is trying to be set on a copy of a slice from a DataFrame.
+Try using .loc[row_indexer,col_indexer] = value instead
+
+See the caveats in the documentation: https://pandas.pydata.org/pandas-docs/stable/user_guide/indexing.html#returning-a-view-versus-a-copy
+  household_demographics['household_']=household_demographics['household_'].astype('object')
+['/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_14.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_15.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_17.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_16.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_12.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_13.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_9.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_11.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_10.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_8.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_5.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_21.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_20.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_4.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_22.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_6.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_7.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_23.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_3.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_2.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_18.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_24.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_1.csv', '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_19.csv']
+   CASE_ID     age    income  household_
+0    49072  55to64  75to100k           0   CASE_ID     age   income  household_
+0    44800  55to64  less75k           0
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_9.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_9.csv.csv
+   CASE_ID     age   income  household_
+0    55156  25to44  less75k           1
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_17.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_17.csv.csv
+
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_14.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_14.csv.csv
+   CASE_ID     age    income  household_
+0    75161  25to44  150kplus           0
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_12.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_12.csv.csv
+error in: 16
+error in: 36
+error in: 37
+error in: 47
+error in: 97
+error in: 132
+error in: 154
+error in: 159
+error in: 168
+error in: 171
+error in: 172
+error in: 194
+error in: 197
+error in: 333
+error in: 404
+error in: 405
+error in: 538
+error in: 544
+error in: 545
+error in: 841
+error in: 847
+error in: 860
+error in: 857
+error in: 1118
+error in: 1272
+error in: 1273
+error in: 1413
+error in: 1414
+error in: 1989
+error in: 2009
+error in: 2010
+error in: 2018
+error in: 2067
+error in: 2068
+error in: 2161
+error in: 2162
+error in: 2163
+error in: 2164
+error in: 2165
+error in: 2171
+error in: 2172
+error in: 2173
+error in: 2174
+error in: 2175
+error in: 2176
+error in: 2177
+error in: 2178
+error in: 2192
+error in: 2193
+error in: 2193
+error in: 2194
+error in: 2195
+error in: 2196
+error in: 2208
+error in: 2209
+error in: 2213
+error in: 2214
+error in: 2215
+error in: 2216
+error in: 2221
+error in: 2222
+error in: 2226
+error in: 2229
+error in: 2230
+error in: 2231
+error in: 2239
+error in: 2240
+error in: 2241
+error in: 2253
+error in: 2254
+error in: 2290
+error in: 2332
+error in: 2342
+error in: 2343
+error in: 2344
+error in: 2345
+error in: 2384
+error in: 2395
+error in: 2396
+error in: 2753
+error in: 2780
+error in: 2788
+error in: 2810
+error in: 2811
+error in: 2814
+error in: 3149
+error in: 3150
+error in: 3307
+error in: 3317
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_14.csv.csv
+   CASE_ID     age    income  household_
+0    78061  55to64  150kplus           0
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_15.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_15.csv.csv
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_17.csv.csv
+   CASE_ID     age     income  household_
+0    17137  65plus  100to150k           0
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_16.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_16.csv.csv
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_9.csv.csv
+   CASE_ID     age   income  household_
+0     3729  25to44  less75k           0
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_11.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_11.csv.csv
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_12.csv.csv
+   CASE_ID     age     income  household_
+0    54153  25to44  100to150k           0
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_13.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_13.csv.csv
+error in: 424
+error in: 429
+error in: 828
+error in: 860
+error in: 938
+error in: 986
+error in: 987
+error in: 988
+error in: 989
+error in: 1073
+error in: 1491
+error in: 1555
+error in: 1582
+error in: 1589
+error in: 1593
+error in: 1594
+error in: 1740
+error in: 1745
+error in: 1764
+error in: 1778
+error in: 1790
+error in: 1803
+error in: 1866
+error in: 1849
+error in: 1862
+error in: 1886
+error in: 1888
+error in: 1894
+error in: 1902
+error in: 1917
+error in: 2004
+error in: 2109
+error in: 2119
+error in: 2164
+error in: 2183
+error in: 2174
+error in: 2221
+error in: 2226
+error in: 2288
+error in: 2310
+error in: 2475
+error in: 2889
+error in: 2890
+error in: 2891
+error in: 2905
+error in: 2906
+error in: 2896
+error in: 2915
+error in: 2913
+error in: 2947
+error in: 2950
+error in: 2962
+error in: 3025
+error in: 3113
+error in: 3176
+error in: 3177
+error in: 3178
+error in: 3220
+error in: 3221
+error in: 3222
+error in: 3223
+error in: 3224
+error in: 3225
+error in: 3226
+error in: 3227
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_15.csv.csv
+   CASE_ID     age    income  household_
+0    76353  45to54  75to100k           1
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_10.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_10.csv.csv
+error in: 3329
+error in: 3341
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_16.csv.csv
+   CASE_ID     age    income  household_
+0    72009  45to54  75to100k           0
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_5.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_5.csv.csv
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_11.csv.csv
+   CASE_ID     age    income  household_
+0      186  45to54  150kplus           0
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_20.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_20.csv.csv
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_13.csv.csv
+   CASE_ID     age    income  household_
+0    52969  45to54  75to100k           1
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_22.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_22.csv.csv
+error in: 16
+error in: 27
+error in: 45
+error in: 55
+error in: 91
+error in: 951
+error in: 989
+error in: 991
+error in: 1128
+error in: 1178
+error in: 1172
+error in: 1189
+error in: 1369
+error in: 1475
+error in: 1502
+error in: 1563
+error in: 1621
+error in: 1622
+error in: 1610
+error in: 1622
+error in: 1623
+error in: 1650
+error in: 1653
+error in: 1696
+error in: 2343
+error in: 2360
+error in: 2394
+error in: 2383
+error in: 2413
+error in: 2414
+error in: 2450
+error in: 2428
+error in: 2603
+error in: 2632
+error in: 2637
+error in: 2846
+error in: 2852
+error in: 2905
+error in: 2906
+error in: 2907
+error in: 2908
+error in: 2896
+error in: 3023
+error in: 3024
+error in: 3035
+error in: 3046
+error in: 3047
+error in: 3035
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_10.csv.csv
+   CASE_ID     age    income  household_
+0    53547  55to64  150kplus           0
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_8.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_8.csv.csv
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_5.csv.csv
+   CASE_ID     age    income  household_
+0    30552  65plus  75to100k           0
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_21.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_21.csv.csv
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_20.csv.csv
+   CASE_ID     age   income  household_
+0    58822  55to64  less75k           0
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_4.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_4.csv.csv
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_22.csv.csv
+   CASE_ID     age    income  household_
+0    50611  25to44  150kplus           1
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_6.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_6.csv.csv
+error in: 346
+error in: 630
+error in: 631
+error in: 653
+error in: 654
+error in: 655
+error in: 667
+error in: 674
+error in: 681
+error in: 682
+error in: 696
+error in: 954
+error in: 955
+error in: 957
+error in: 995
+error in: 1023
+error in: 1146
+error in: 1160
+error in: 1161
+error in: 1297
+error in: 1284
+error in: 1294
+error in: 1372
+error in: 1411
+error in: 1466
+error in: 1472
+error in: 1537
+error in: 1542
+error in: 1977
+error in: 2029
+error in: 2038
+error in: 2019
+error in: 2268
+error in: 2428
+error in: 2435
+error in: 2436
+error in: 2437
+error in: 2460
+error in: 2564
+error in: 2568
+error in: 2678
+error in: 2685
+error in: 2675
+error in: 2676
+error in: 2732
+error in: 2993
+error in: 2996
+error in: 2997
+error in: 2998
+error in: 3003
+error in: 3189
+error in: 3190
+error in: 3191
+error in: 3214
+error in: 3215
+error in: 3216
+error in: 3267
+error in: 3294
+error in: 3295
+error in: 3296
+error in: 3297
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_8.csv.csv
+   CASE_ID     age    income  household_
+0    57744  55to64  75to100k           0
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_7.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_7.csv.csv
+error in: 3314
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_4.csv.csv
+   CASE_ID     age   income  household_
+0      482  65plus  less75k           1
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_3.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_3.csv.csv
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_21.csv.csv
+   CASE_ID     age   income  household_
+0    47128  25to44  less75k           0
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_18.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_18.csv.csv
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_6.csv.csv
+   CASE_ID     age    income  household_
+0    33813  65plus  75to100k           0
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_1.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_1.csv.csv
+error in: 823
+error in: 827
+error in: 838
+error in: 839
+error in: 1083
+error in: 1088
+error in: 1093
+error in: 1097
+error in: 1240
+error in: 1241
+error in: 1242
+error in: 1307
+error in: 1308
+error in: 1309
+error in: 1310
+error in: 1408
+error in: 1409
+error in: 1410
+error in: 1411
+error in: 1444
+error in: 1454
+error in: 1455
+error in: 1456
+error in: 1472
+error in: 1473
+error in: 1474
+error in: 1694
+error in: 1764
+error in: 1773
+error in: 1774
+error in: 1776
+error in: 1789
+error in: 1795
+error in: 1803
+error in: 1817
+error in: 1780
+error in: 1881
+error in: 2107
+error in: 2174
+error in: 2175
+error in: 2176
+error in: 2244
+error in: 2575
+error in: 2578
+error in: 2579
+error in: 2570
+error in: 2595
+error in: 2596
+error in: 2600
+error in: 2609
+error in: 2610
+error in: 2619
+error in: 2643
+error in: 2645
+error in: 2847
+error in: 2855
+error in: 2856
+error in: 2868
+error in: 2875
+error in: 2882
+error in: 2890
+error in: 2899
+error in: 2956
+error in: 3105
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_7.csv.csv
+   CASE_ID       age    income  household_
+0    12299  25_below  75to100k           0
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_23.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_23.csv.csv
+error in: 0
+error in: 3
+error in: 4
+error in: 10
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_1.csv.csv
+   CASE_ID     age   income  household_
+0     5299  65plus  less75k           0
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_19.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_19.csv.csv
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_3.csv.csv
+   CASE_ID     age    income  household_
+0    36936  45to54  75to100k           0
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_2.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_2.csv.csv
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_18.csv.csv
+   CASE_ID     age   income  household_
+0    48570  65plus  less75k           0
+name of file: /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_24.csv
+beginning initialization of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_24.csv.csv
+error in: 380
+error in: 423
+error in: 442
+error in: 463
+error in: 486
+error in: 683
+error in: 729
+error in: 744
+error in: 745
+error in: 773
+error in: 800
+error in: 802
+error in: 830
+error in: 851
+error in: 875
+error in: 885
+error in: 886
+error in: 1312
+error in: 1416
+error in: 1424
+error in: 1906
+error in: 1924
+error in: 1925
+error in: 1996
+error in: 2018
+error in: 2039
+error in: 2054
+error in: 2053
+error in: 2063
+error in: 2058
+error in: 2096
+error in: 2086
+error in: 2087
+error in: 2129
+error in: 2216
+error in: 2221
+error in: 2261
+error in: 2262
+error in: 2263
+error in: 2297
+error in: 2307
+error in: 2308
+error in: 2314
+error in: 2350
+error in: 2354
+error in: 2361
+error in: 2370
+error in: 2439
+error in: 2641
+error in: 2843
+error in: 2844
+error in: 2861
+error in: 3075
+error in: 3190
+error in: 3207
+error in: 3286
+error in: 3297
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_23.csv.csv
+error in: 3278
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_2.csv.csv
+error in: 3332
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_19.csv.csv
+finished exporting the initialized file of /Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/data/initialization_subsets_24/df_24.csv.csv
+(networksci) Aarthis-MacBook-Air:model rtseinstein$ 
