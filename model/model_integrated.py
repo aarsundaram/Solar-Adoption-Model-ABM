@@ -13,16 +13,16 @@ from pathos.multiprocessing import ProcessingPool
 from households import Household
 import resource 
 import sys 
-import json 
-import logging
+import glob
 
 sys.setrecursionlimit(10000)
 
 class AdoptionModel(Model):
     
-    def __init__(self):
+    
+    def __init__(self,filename):
         
-        
+        self.filename = filename
         self.schedule = BaseScheduler(self)
         self.space = None
         self.run_time = 8
@@ -67,7 +67,7 @@ class AdoptionModel(Model):
         
         #df = pd.read_csv(rootpath+'data\\households_subset\\subset_initialized_latlonvalues.csv')
         #df = pd.read_csv(rootpath+'data/households_subset/subset_initialized_latlonvalues.csv')
-        df = pd.read_csv(rootpath+'data/households_censustracts/tract_100.csv')
+        df = pd.read_csv(self.filename)
         df = df.drop(columns='Unnamed: 0') 
         #df = df.head(3000)
 
@@ -412,7 +412,6 @@ class AdoptionModel(Model):
             for edge in list(tempG.edges()):
                 circles_of_influence(edge,mu=0.1)
 
-        
 
     def subnorms_evolution(self):
         """
@@ -505,13 +504,19 @@ rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'       
 #sample.step()
 # can run upto 48 steps (4 years) 
 
-sample = AdoptionModel()
 
-for i in range(2):
-    sample.step()
+def model_run(filename):
+    sample = AdoptionModel(filename)
+    for i in range(36):
+        sample.step()
+    rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'       
+    outputfile = filename[90:len(filename)]                              
+    sample.datacollector_df.to_csv(rootpath+'experiment/integrated/'+str(outputfile))
+    
 
+#model_run(rootpath+'data/households_censustracts/tract_100.csv')
 
-#with open(rootpath+'experiment/tpb_output.json', 'w') as json_file:
-#  json.dump(final_output, json_file)
-
-sample.datacollector_df.to_csv(rootpath+'experiment/integrated_model_tract100_2steps.csv')
+#filename= glob.glob(rootpath+'data/households_censustracts/*.csv')
+##parallelizing runs
+#pool = ProcessingPool(4)
+#results = pool.map(model_run,filename)
