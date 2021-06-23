@@ -56,11 +56,11 @@ print(filenames)
 
 #definition of initialize function 
 def initialize(file):
-    a= file
+    print(file,'\n and 'file[100:-4])
     df = pd.read_csv(file)
     print(df.head(1))
-    df_name = str(a)[100:-4]
-    print('name of file:',df_name)
+    df_name = a
+    print('name of file:',file[100:-4])
     print('beginning initialization')
     attitude={}
     subnorms={}
@@ -118,8 +118,8 @@ def initialize(file):
     df['subnorms']= list(subnorms.values())
     df['pbc']= list(pbc.values())
 
-    df.to_csv(rootpath+f'data/init_output/{df_name}_initialized.csv')
-    print(f'finished exporting the initialized file of {df_name}.csv')
+    df.to_csv(rootpath+f'data/init_output/{file[100:-4]}_initialized.csv')
+    print(f'finished exporting the initialized file of {file[100:-4]}.csv')
 
 pool = ProcessingPool(8)
 results = pool.map(initialize,filenames)
