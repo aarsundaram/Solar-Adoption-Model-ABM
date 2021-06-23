@@ -4,7 +4,7 @@ from mesa import Model
 from mesa.time import BaseScheduler
 from mesa.space import NetworkGrid
 import random
-from networkx.generators.small import house_graph
+#from networkx.generators.small import house_graph
 import pandas as pd
 import networkx as nx
 #import multiprocessing as mp 
@@ -22,7 +22,7 @@ class AdoptionModel(Model):
     
     def __init__(self):
         
-
+        
         self.schedule = BaseScheduler(self)
         self.space = None
         self.run_time = 8
@@ -30,11 +30,9 @@ class AdoptionModel(Model):
 
 
         ## Interaction Groups 
-        self.block_dict = {}                        ## Geographic interaction
-        self.incomegroup_dict= {}                   ## CIRCLE-3 (outermost) in Circle of Influence
-        self.blockgroup_incomegroup_dict = {}       ## CIRCLE-2 in Circle of Influence
-        #self.bothcircles=[]                         ## contains agents in both circles so that 6 of them can be picked to be part of the core-group 
-        #self.coregroup = {}                         ## CIRCLE-1 contains the core social group of the household 
+        self.geoid_dict = {}                        ## Geographic interaction
+        self.bgid_dict= {}                          ## circle-2 interaction
+        self.all_households= []                     ## to hold list of all households in albany
                                                     
         
         ## TPB attributes
@@ -64,78 +62,69 @@ class AdoptionModel(Model):
 
         """ 
         #rootpath = 'c:\\Users\\Gamelab\\Desktop\\RT\\Others\\Thesis\\Thesis_coding\\ABM\\Solar-Adoption-Agent-Based-Model\\' 
-<<<<<<< HEAD
         #rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Agent-based-Model/'
-        rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Agent-based-Model/'
+        rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'
         
-=======
-        rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Agent-based-Model/'
-        #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Agent-based-Model/'
->>>>>>> 2dd2f5a1a65bdf442d49e6d5c6ef0e65e2d5a87b
         #df = pd.read_csv(rootpath+'data\\households_subset\\subset_initialized_latlonvalues.csv')
-        df = pd.read_csv(rootpath+'data/households_subset/subset_initialized_latlonvalues.csv')
+        #df = pd.read_csv(rootpath+'data/households_subset/subset_initialized_latlonvalues.csv')
+        df = pd.read_csv(rootpath+'data/households_censustracts/tract_100.csv')
         df = df.drop(columns='Unnamed: 0') 
-<<<<<<< HEAD
-        df = df.head(3000)
+        #df = df.head(3000)
 
-=======
-        df = df.head(2000)
->>>>>>> 2dd2f5a1a65bdf442d49e6d5c6ef0e65e2d5a87b
+        households_main = pd.read_csv(rootpath+'data/households_main/households_main_initialized.csv')
+        households_main = households_main.drop(columns='Unnamed: 0')
 
-        # create an empty dictionary for storing agents block-wise 
-        for block in list(df['geoid'].unique()):
-            self.block_dict[block] =[]
 
-        # create an empty dictionary for storing agents in same income-group 
-                                                            ### CIRCLE OF INFLUENCE : CIRCLE-2 
-        for incomegroup in list(df['income'].unique()):
-            self.incomegroup_dict[incomegroup]=[]
+        # create an empty dictionary for storing agents neighborhood-wise (geoid) 
+        for geoid in list(df['GEOID10'].unique()):
+            self.geoid_dict[geoid] =[]
+
 
         for blockgroup in list(df['bgid'].unique()):
-            for incomegroup in list(df['income'].unique()):
-                self.blockgroup_incomegroup_dict[(blockgroup,incomegroup)] = [] 
+            self.bgid_dict[blockgroup]=[]
 
+        
         #####################################################
         #### INITIALIZING TOLERATED PAYBACK PERIOD  #########
         #####################################################
 
-        pbc_dict = {}
+        pbc_dict1 = {}
         for _,row in df.iterrows():
-            pbc_dict[row['CASE_ID']] = [row['pbc']]
+            pbc_dict1[row['case_id']] = [row['pbc']]
 
         values = list(df['pbc'])
         min_value = min(values)
         max_value = max(values)
 
-        for caseid in list(pbc_dict.keys()):
-            fraction = ((pbc_dict[caseid][0] - min_value) / (max_value - min_value))*100
+        for caseid in list(pbc_dict1.keys()):
+            fraction = ((pbc_dict1[caseid][0] - min_value) / (max_value - min_value))*100
 
-            pbc_dict[caseid].append(fraction)
+            pbc_dict1[caseid].append(fraction)
             if 0<= fraction <1:
-                pbc_dict[caseid].append(0)
+                pbc_dict1[caseid].append(0)
             if 1<= fraction <5:
-                pbc_dict[caseid].append(3)
+                pbc_dict1[caseid].append(3)
             if 5<= fraction <10: 
-                pbc_dict[caseid].append(5)
+                pbc_dict1[caseid].append(5)
             if 10<= fraction <25: 
-                pbc_dict[caseid].append(6)
+                pbc_dict1[caseid].append(6)
             if 25<= fraction <35: 
-                pbc_dict[caseid].append(7.5)
+                pbc_dict1[caseid].append(7.5)
             if 35<= fraction <40: 
-                pbc_dict[caseid].append(8)
+                pbc_dict1[caseid].append(8)
             if 40<= fraction <50: 
-                pbc_dict[caseid].append(10)
+                pbc_dict1[caseid].append(10)
             if 50<= fraction <78: 
-                pbc_dict[caseid].append(15)
+                pbc_dict1[caseid].append(15)
             if 78<= fraction <95: 
-                pbc_dict[caseid].append(20)
+                pbc_dict1[caseid].append(20)
             if 95<= fraction <100: 
-                pbc_dict[caseid].append(25)
+                pbc_dict1[caseid].append(25)
             if fraction== 100: 
-                pbc_dict[caseid].append(30)
+                pbc_dict1[caseid].append(30)
 
         tolerated_paybackperiods= []
-        for i in list(pbc_dict.values()):
+        for i in list(pbc_dict1.values()):
             tolerated_paybackperiods.append(i[2])
         
         # add this column to df
@@ -143,24 +132,25 @@ class AdoptionModel(Model):
         #print(tolerated_paybackperiods)
 
         for _,row in df.iterrows():
-            agent = Household(unique_id = str(row['CASE_ID']),
+            agent = Household(unique_id = str(row['case_id']),
                              model = self, 
                              income = row['income'],
                              age= row['age'],
                              size= row['household_'],
-                             ami_category = row['ami_categ'],
-                             elec_consumption= row['elec_consumption'],
+                             ami_category = row['ami_catego'],
+                             elec_consumption= row['elec_consu'],
                              attitude = row['attitude'],
                              attitude_uncertainty = 1-abs(row['attitude']),
                              pbc = row['pbc'],
                              subnorms = row['subnorms'],
-                             geoid = row['geoid'],
-                             tract = row['tract'],
+                             geoid = row['GEOID10'],
+                             tract = row['TRACTCE10'],
                              bgid = row['bgid'],
                              ToleratedPayBackPeriod= row['toleratedpayback'],
                              circle1=[],
                              circle2=[],
                              circle3=[],
+                             geolinks=[],
                              adoption_status = 0)
 
             if agent:
@@ -168,13 +158,12 @@ class AdoptionModel(Model):
                 
                 self.schedule.add(agent)
                 self.G.add_node(agent, label=agent.unique_id)   # main graph holds all agent nodes
-
- 
+                
 
                 #preparing dictioanries that will enable interactions 
-                self.block_dict[agent.geoid].append(agent)
-                self.incomegroup_dict[agent.income].append(agent)
-                self.blockgroup_incomegroup_dict[(agent.bgid,agent.income)].append(agent)
+                self.all_households.append(agent)
+                self.geoid_dict[agent.geoid].append(agent)
+                self.bgid_dict[agent.bgid].append(agent)
                 
                 # preparing tpb dictionaries
                 self.attitude_dict[agent]={}
@@ -202,38 +191,48 @@ class AdoptionModel(Model):
 
         # after all the agents have been initialized, now give them coregroups
         for agent in self.schedule.agents:
-            #print('\n agent name:', agent.unique_id)
-            #print(self.blockgroup_incomegroup_dict[(agent.bgid,agent.income)])
-            #print(self.incomegroup_dict[agent.income])
-            circle2 = self.blockgroup_incomegroup_dict[(agent.bgid,agent.income)]     # TODO: Remove the agent from their own circles of influence. 
-            circle3 = self.incomegroup_dict[agent.income]                         # returns a list of the members of the household's incomegroup bracket. 
-        
-            #print(circle2)
-            #print(circle3)
-            if circle2 is not None:
-                circle2_choices = list(random.choices(circle2,k=min(len(circle2),3)))
-                circle2 = [x for x in circle2 if x not in circle2_choices]
-                agent.circle2 = circle2
-            else:
-                circle2_choices=[] 
-
-            if circle3 is not None:
-                circle3_choices = list(random.choices(circle3,k=min(len(circle3),3)))
-                circle3 = [x for x in circle3 if x not in circle3_choices]
-                agent.circle3 = circle3
-            else:
-                circle3_choices = [] 
-
-            agent.circle1= circle2_choices+circle3_choices  ## circle1 
             
-            #print('agent circle-1: ', len(agent.circle1))
-            #print('members of circle1:',[x.unique_id for x in list(agent.circle1)])
-            #print('second circle:', len(agent.circle2))
-            #print('members of circle2:',[x.unique_id for x in list(agent.circle2)])
-            #print('third circle', len(agent.circle3)) 
-            #print('members of circle3:',[x.unique_id for x in list(agent.circle3)])
-             
-             
+            #geolinks at geoid level
+            #initialize upto 10 neighs that will be in their network
+            neighs = random.choices(self.geoid_dict[agent.geoid],k=min(len(self.geoid_dict[agent.geoid]),10))
+            neighs = [i for i in neighs if i!=agent]
+
+            
+            #circle2 at bgid level 
+            #initialize upto 50 of them who will be in their network.
+            # they will actually interact with just 15 of them max every month
+            bgid_neighs = random.choices(self.bgid_dict[agent.bgid],k=min(50,len(self.bgid_dict[agent.bgid])))
+            bgid_neighs = [i for i in bgid_neighs if i!=agent]
+
+            #add 3 from these permanently to circle1
+            circle1 = random.choices(bgid_neighs,k=min(3,len(bgid_neighs)))
+            #remove these core members from the bgid_neighs to prevent double interaction
+            bgid_neighs = [i for i in bgid_neighs if i not in circle1]
+
+
+
+            #circle3 at albany level
+            #initialize upto 200 of them.
+            #although at every timestep, an agent interacts only with upto 20 of them
+            thirdcircle = random.choices(self.all_households,k=200)
+            thirdcircle = [i for i in thirdcircle if i!=agent]
+            #adding 2 from these permanently to core group
+            circle1 = circle1+ random.choices(thirdcircle, k=min(2,len(thirdcircle)))
+            thirdcircle = [i for i in thirdcircle if i not in circle1]
+
+            for i in thirdcircle:
+                if i not in list(self.G.nodes()):
+                    self.G.add_node(i)
+            
+
+            # initializing the networks.
+            #no edges at this stage. only at the attitude evolution step
+            agent.geolinks = neighs
+            agent.circle2 = bgid_neighs
+            agent.circle3= thirdcircle
+            agent.circle1 = circle1
+
+
     def attitude_evolution(self):
         """
         Using the relative aggreement algorithm, model interactions between agents at:
@@ -241,19 +240,13 @@ class AdoptionModel(Model):
         - socioeconomic level (interactions within different circles of the agent)
         """
 
-        ## for every block in block_dict:
-        ### a) get list of agents in that block. 
-        ### b) add them to a temporary graph temp_G and add random edges between them
-        ### c) compose them to a main graph called maingraph  (needed?)
-        ### d) add the new edges to a global list containing all interactions in that time-step
-        ###    this will be refreshed at every time-step beginning 
+        #At every timestep, go through every agent, get their 4 circles
+        # create random interactions within their social networks 
+        # store these interactions in "interactions"
+        # return this to the model
+        # in a for-loop, the model goes through every interaction and updates opinions
+        interactions = []
 
-        ### e) for every pair in the list of interactions for that time-step, run the RA_algo
-
-        ### Two functions are required:
-        #   (i) add_and_remove_edges 
-        #   (ii) ra_algorithm
-        
         def add_and_remove_edges(G, p_new_connection, p_remove_connection):    
             """
             where:
@@ -298,194 +291,128 @@ class AdoptionModel(Model):
                         connected.remove(remove)    
                         unconnected.append(remove)    
             return rem_edges, new_edges
-          
- 
-        #maingraph= nx.Graph()
-        interactions = []
 
-        ######################
-        ## GEOGRAPHIC ########
-        ######################
 
-        ## creating random interactions between agents within a census block [geographically]
-
-                    ## This implies that not all agents interact visually with members of the neigbhourdhood every month. 
-                    ## Some agents may not interact with any other agent during a month. 
-        for block in list(self.block_dict.keys()):
-            tempG = nx.Graph() ## temp graph to store the households in a block
-            householdagents_in_block= self.block_dict[block]
+        def ra_implementation(a,b, mu=0.2):
+            """
+            where:
+            a = first mesa agent in the interactions pair
+            b = second mesa agent in the interactions pair
             
-            for household in householdagents_in_block:
-                tempG.add_node(household)
-            # graph created
-            removed_edges,added_edges = add_and_remove_edges(tempG,p_new_connection=0.6,p_remove_connection=0.6)
-                                                                                ## TODO: be sure to change these values for Sensitivity Analysis?
-            for newedge in added_edges:
-                interactions.append(newedge)
-        
-        
-        ## creating interactions between blocks. People interact outside the block if they belong to the same income group
-        
-        ######################
-        #### SOCIOECONOMIC ###
-        ######################
+            returns: attitude (float64) of first agent, attitude of second agent
 
-        ## Here every agent will be activated to randomly interact with members of their inner group, workplace group and finally circle-3
-        ## circle-3 can be used to simulate online social network activities, although the belief that people attach from information originating from such networks 
-                ## will be modelled to be low. 
+            """
+            ## DONE : add the uncertainty values from a V-shaped map that is derived from the 
+            ## agent's attitude itself. If extreme, more certain. Centrist: more uncertain.
 
-        ## because every time-step, every agent is activated for this interaction, we will loop through every agent in the schedule. 
-            ## if they are adopters, they will influence and not be influenced. if the agent they are interacting with also is an adopter, there will be no change in opinions. 
-            ## if they are not yet adopters, they will BE influenced by their circles. they will be the "SECOND Agent (B)" in the relative agreement theory. 
+            if a.adoption_status==1:
+                mu = 0.5  #intensity of interactions is more if a is an adopter
+            else:
+                mu=0.2
+                        # TODO: sensitivity analysis on this variable 
+            #print('a:',a.unique_id,'b',b.unique_id)
 
-        ## for every agent, get the members of their three circles and draw path graphs between them. add these to the main interactions list.
+            h_ij=0
+            #x_i= a.attitude
+            x_i = self.attitude_dict[a][self.schedule.steps][-1]
+            #print('initial x_i', x_i)
+            #u_i= a.attitude_uncertainty   ## DONE: this also has to be initialized at the very beginning for this to change. 
+            u_i = self.attitude_uncertainty_dict[a][self.schedule.steps][-1]
 
-        for agent in self.schedule.agents:
-            ## FIRST CIRCLE ## 
-            # core group for every household
-            members_circle1 = agent.circle1   # DONE: does not contain agent. #removing agent so that circle members contains only neighs with whom the agent will interact.
-            random_members_circle1 = random.choices(members_circle1, k=int(len(members_circle1)/2))   ## interact with 3 of the coregroup members each round
-            # create a graph                                                                          ## TODO: Key Parameter
-            tempG = nx.Graph()
-            tempG.add_node(agent)
-            for member in members_circle1:
-                if agent!=member:
-                    tempG.add_node(member)
+            #x_j= b.attitude
+            x_j = self.attitude_dict[b][self.schedule.steps][-1]
+            #print('initial x_j', x_j)
+            #u_j= b.attitude_uncertainty
+            u_j =  self.attitude_uncertainty_dict[b][self.schedule.steps][-1] 
 
-            tempG.add_edges_from([(agent,node) for node in random_members_circle1])
-            for circle1_interaction  in list(tempG.edges()):
+
+
+            h_ij=min(x_i+u_i, x_j+u_j) - max(x_i-u_i, x_j-u_j)
+
+            if(h_ij>u_i):
                 
-                interactions.append(circle1_interaction)
+                relagree=(h_ij/u_i)-1
+                #print('relagree', relagree)
+                delta_x_j=mu*relagree*(x_i-x_j)
+                #print('delta_x_j:', delta_x_j)
+                delta_u_j=mu*relagree*(u_i-u_j)
+                #print('delta_u_j',delta_u_j)
+                x_j=x_j+delta_x_j
+                #print('new x_j:', x_j)
+                u_j=u_j+delta_u_j
+                #print('new x_i', x_i)
+                
+                #print('x_i,  x_j =', x_i, x_j )
+                #print('timestep:',self.schedule.steps,'\n')
+                #print("influence! dx, du=",delta_x_j,delta_u_j)
+
+            #opinions change only for non-adopters 
+                #updating uncertainty of b
+                self.attitude_uncertainty_dict[b][self.schedule.steps].append(u_j)
+
+            return x_i,x_j
 
 
-            ## SECOND CIRCLE ## 
-            members_circle2 = agent.circle2 
-            random_members_circle2 = random.choices(members_circle2, k=int(len(members_circle2)*0.20))   ## interact with 20% of circle3 members
-                                                                                                        ## TODO: Key Parameter
-            # create a graph 
+        def circles_of_influence(interaction,mu=0.2):
+            
+            ## making it directional on adopters # TODO: just marking for easy access. 
+            if (interaction[0].adoption_status ==1) and (interaction[1].adoption_status==1): #if both agents are adopters, no need RA-implementation
+
+                self.attitude_dict[interaction[0]][self.schedule.steps].append(self.attitude_dict[interaction[0]][self.schedule.steps][-1])   #value remains the same basically, no change
+                self.attitude_dict[interaction[1]][self.schedule.steps].append(self.attitude_dict[interaction[1]][self.schedule.steps][-1])   #value remains the same basically, no change
+
+                print('Time step:', self.schedule.steps,',both', interaction[0].unique_id,'and',interaction[1].unique_id,'are adopters, no change in opinions!')
+
+
+            if (interaction[0].adoption_status==1) and (interaction[1].adoption_status==0): 
+                first_agent = interaction[0]
+                second_agent = interaction[1]
+                
+                first_agent_initial_attitude = self.attitude_dict[first_agent][self.schedule.steps][-1]
+                second_agent_initial_attitude= self.attitude_dict[second_agent][self.schedule.steps][-1]
+
+                first_agent_new_attitude, second_agent_new_attitude = ra_implementation(first_agent,second_agent, mu)
+                self.attitude_dict[first_agent][self.schedule.steps].append(first_agent_new_attitude)
+                self.attitude_dict[second_agent][self.schedule.steps].append(second_agent_new_attitude) 
+                
+            else:
+                first_agent = interaction[1]
+                second_agent= interaction[0]
+
+                first_agent_initial_attitude = self.attitude_dict[first_agent][self.schedule.steps][-1]
+                second_agent_initial_attitude= self.attitude_dict[second_agent][self.schedule.steps][-1]
+
+                first_agent_new_attitude, second_agent_new_attitude = ra_implementation(first_agent,second_agent, mu)
+                self.attitude_dict[first_agent][self.schedule.steps].append(first_agent_new_attitude)
+                self.attitude_dict[second_agent][self.schedule.steps].append(second_agent_new_attitude) 
+
+            
+        for agent in self.schedule.agents:
             tempG = nx.Graph()
-            tempG.add_node(agent)
-            for member in members_circle2:
-                if agent!=member:
-                    tempG.add_node(member)
+            for i in random.choices(agent.geolinks,k=min(len(agent.geolinks),5)):
+                tempG.add_edge(agent,i)
+            for edge in list(tempG.edges()):
+                circles_of_influence(edge,mu=0.5)
 
-            tempG.add_edges_from([(agent,node) for node in random_members_circle2])
-            for circle2_interaction  in list(tempG.edges()):
-                interactions.append(circle2_interaction)
-            
-
-           ## THIRD CIRCLE ## 
-            members_circle3 = agent.circle3
-            random_members_circle3 = random.choices(members_circle3, k=int(len(members_circle3)*0.01))   ## interact with 1% of circle3 members
-                                                                                                        ## TODO: Key Parameter
-            # create a graph 
             tempG = nx.Graph()
-            tempG.add_node(agent)
-            for member in members_circle3:
-                if agent!=member:
-                    tempG.add_node(member)
+            for i in agent.circle1:
+                tempG.add_edge(agent,i)
+            for edge in list(tempG.edges()):
+                circles_of_influence(edge,mu=0.8)
 
-            tempG.add_edges_from([(agent,node) for node in random_members_circle3])
-            for circle3_interaction  in list(tempG.edges()):
-                interactions.append(circle3_interaction)           
+            tempG = nx.Graph()
+            for i in random.choices(agent.circle2, k=min(15,len(agent.circle2))):
+                tempG.add_edge(agent,i)
+            for edge in list(tempG.edges()):
+                circles_of_influence(edge, mu=0.2)
 
-        return interactions
+            tempG = nx.Graph()
+            for i in random.choices(agent.circle3,k=min(20,len(agent.circle3))):
+                tempG.add_edge(agent,i)
+            for edge in list(tempG.edges()):
+                circles_of_influence(edge,mu=0.1)
 
-
-    def ra_implementation(self, a,b, mu=0.2):
-        """
-        where:
-        a = first mesa agent in the interactions pair
-        b = second mesa agent in the interactions pair
         
-        returns: attitude (float64) of first agent, attitude of second agent
-
-        """
-        ## DONE : add the uncertainty values from a V-shaped map that is derived from the 
-        ## agent's attitude itself. If extreme, more certain. Centrist: more uncertain.
-
-        if a.adoption_status==1:
-            mu = 0.5  #intensity of interactions is more if a is an adopter
-        else:
-            mu=0.2
-                    # TODO: sensitivity analysis on this variable 
-        #print('a:',a.unique_id,'b',b.unique_id)
-
-        h_ij=0
-        #x_i= a.attitude
-        x_i = self.attitude_dict[a][self.schedule.steps][-1]
-        #print('initial x_i', x_i)
-        #u_i= a.attitude_uncertainty   ## DONE: this also has to be initialized at the very beginning for this to change. 
-        u_i = self.attitude_uncertainty_dict[a][self.schedule.steps][-1]
-
-        #x_j= b.attitude
-        x_j = self.attitude_dict[b][self.schedule.steps][-1]
-        #print('initial x_j', x_j)
-        #u_j= b.attitude_uncertainty
-        u_j =  self.attitude_uncertainty_dict[b][self.schedule.steps][-1] 
-
-
-
-        h_ij=min(x_i+u_i, x_j+u_j) - max(x_i-u_i, x_j-u_j)
-
-        if(h_ij>u_i):
-            
-            relagree=(h_ij/u_i)-1
-            #print('relagree', relagree)
-            delta_x_j=mu*relagree*(x_i-x_j)
-            #print('delta_x_j:', delta_x_j)
-            delta_u_j=mu*relagree*(u_i-u_j)
-            #print('delta_u_j',delta_u_j)
-            x_j=x_j+delta_x_j
-            #print('new x_j:', x_j)
-            u_j=u_j+delta_u_j
-            #print('new x_i', x_i)
-            
-            #print('x_i,  x_j =', x_i, x_j )
-            #print('timestep:',self.schedule.steps,'\n')
-            #print("influence! dx, du=",delta_x_j,delta_u_j)
-
-           #opinions change only for non-adopters 
-            #updating uncertainty of b
-            self.attitude_uncertainty_dict[b][self.schedule.steps].append(u_j)
-
-        return x_i,x_j
-
-
-    def circles_of_influence(self, interaction):
-        
-        ## making it directional on adopters # TODO: just marking for easy access. 
-        if (interaction[0].adoption_status ==1) and (interaction[1].adoption_status==1): #if both agents are adopters, no need RA-implementation
-
-            self.attitude_dict[interaction[0]][self.schedule.steps].append(self.attitude_dict[interaction[0]][self.schedule.steps][-1])   #value remains the same basically, no change
-            self.attitude_dict[interaction[1]][self.schedule.steps].append(self.attitude_dict[interaction[1]][self.schedule.steps][-1])   #value remains the same basically, no change
-
-            print('Time step:', self.schedule.steps,',both', interaction[0].unique_id,'and',interaction[1].unique_id,'are adopters, no change in opinions!')
-
-
-        if (interaction[0].adoption_status==1) and (interaction[1].adoption_status==0): 
-            first_agent = interaction[0]
-            second_agent = interaction[1]
-            
-            first_agent_initial_attitude = self.attitude_dict[first_agent][self.schedule.steps][-1]
-            second_agent_initial_attitude= self.attitude_dict[second_agent][self.schedule.steps][-1]
-
-            first_agent_new_attitude, second_agent_new_attitude = self.ra_implementation(first_agent,second_agent)
-            self.attitude_dict[first_agent][self.schedule.steps].append(first_agent_new_attitude)
-            self.attitude_dict[second_agent][self.schedule.steps].append(second_agent_new_attitude) 
-            
- 
-        else:
-            first_agent = interaction[1]
-            second_agent= interaction[0]
-
-            first_agent_initial_attitude = self.attitude_dict[first_agent][self.schedule.steps][-1]
-            second_agent_initial_attitude= self.attitude_dict[second_agent][self.schedule.steps][-1]
-
-            first_agent_new_attitude, second_agent_new_attitude = self.ra_implementation(first_agent,second_agent)
-            self.attitude_dict[first_agent][self.schedule.steps].append(first_agent_new_attitude)
-            self.attitude_dict[second_agent][self.schedule.steps].append(second_agent_new_attitude) 
-
 
     def subnorms_evolution(self):
         """
@@ -495,18 +422,18 @@ class AdoptionModel(Model):
         for household in self.schedule.agents:
             # get the number of adopters in the household's block
             adopters_in_block = []
-            for hh in self.block_dict[household.geoid]:
+            for hh in self.geoid_dict[household.geoid]:
                 if hh.adoption_status==1:
                     adopters_in_block.append(hh)
                     self.subnorms_dict[hh][self.schedule.steps].append(1)
 
             if household.adoption_status==0:
-                if len(adopters_in_block) > (0.33 * len(self.block_dict[household.geoid])): 
+                if len(adopters_in_block) > (0.33 * len(self.geoid_dict[household.geoid])): 
                     self.subnorms_dict[household][self.schedule.steps].append(min(household.subnorms+0.5,1))       
                                             ## if more than one-third of the neighbors have a solar panel on their roof, 
                                             ## the household's subnorms becomes increases by 0.5 
                                             ## any scientific explanation for the threshold? 
-                if len(adopters_in_block) > (0.5 * len(self.block_dict[household.geoid])): 
+                if len(adopters_in_block) > (0.5 * len(self.geoid_dict[household.geoid])): 
                     self.subnorms_dict[household][self.schedule.steps].append(1)                
                                             ## if more than 1/2 of the neighbors have a solar panel on their roof, 
                                             ## the household's subnorms becomes increases to 1 
@@ -539,9 +466,7 @@ class AdoptionModel(Model):
                 self.subnorms_dict[agent][self.schedule.steps].append(self.subnorms_dict[agent][self.schedule.steps - 1][-1])
         
 
-        interactions = self.attitude_evolution()
-        for interaction in interactions:
-            self.circles_of_influence(interaction)
+        self.attitude_evolution()
         
         #pool = ProcessingPool(4)
         #results= pool.map(self.circles_of_influence, [interaction for interaction in interactions], chunksize=50) 
@@ -572,9 +497,9 @@ class AdoptionModel(Model):
 ################################################################################################################
 #rootpath = 'c:\\Users\\Gamelab\\Desktop\\RT\\Others\\Thesis\\Thesis_coding\\ABM\\Solar-Adoption-Agent-Based-Model\\'  #windows
 #rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Agent-based-Model/'                                            #server 
-rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Agent-based-Model/'                                       #mac 
+rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'                                       #mac 
 #rootpath = 'c:\\Users\\Gamelab\\Desktop\\RT\\Others\\Thesis\\Thesis_coding\\ABM\\Solar-Adoption-Agent-Based-Model\\' 
-rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Agent-based-Model/'
+#rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Agent-based-Model/'
 #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Agent-based-Model/'
 
 #sample.step()
@@ -582,11 +507,11 @@ rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Agent-based-Model/'
 
 sample = AdoptionModel()
 
-for i in range(36):
+for i in range(2):
     sample.step()
 
 
 #with open(rootpath+'experiment/tpb_output.json', 'w') as json_file:
 #  json.dump(final_output, json_file)
 
-sample.datacollector_df.to_csv(rootpath+'experiment/tpbvalues_updating_trial.csv')
+sample.datacollector_df.to_csv(rootpath+'experiment/integrated_model_tract100_2steps.csv')

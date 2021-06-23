@@ -10,7 +10,7 @@ from networkx.classes.function import selfloop_edges
 class Household(Agent):
  
 
-    def __init__(self, unique_id, model, income,age,size,ami_category,elec_consumption,attitude,attitude_uncertainty, pbc,subnorms,geoid,tract,bgid,ToleratedPayBackPeriod,circle1, circle2, circle3, adoption_status=0):
+    def __init__(self, unique_id, model, income,age,size,ami_category,elec_consumption,attitude,attitude_uncertainty, pbc,subnorms,geoid,tract,bgid,ToleratedPayBackPeriod,circle1, circle2, circle3, geolinks,adoption_status=0):
         super().__init__(unique_id, model)
         self.unique_id = unique_id
         self.income = income
@@ -35,6 +35,7 @@ class Household(Agent):
         self.circle1 = circle1
         self.circle2 = circle2        
         self.circle3 = circle3     
+        self.geolinks = geolinks
         
         self.adoption_status = adoption_status
    
