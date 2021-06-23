@@ -11,7 +11,7 @@ import networkx as nx
 import dill 
 from pathos.multiprocessing import ProcessingPool
 from households import Household
-import resource 
+#import resource 
 import sys 
 import glob
 
@@ -516,7 +516,7 @@ def model_run(filename):
 
 #model_run(rootpath+'data/households_censustracts/tract_100.csv')
 
-#filename= glob.glob(rootpath+'data/households_censustracts/*.csv')
+filename= glob.glob(rootpath+'data/households_censustracts/*.csv')
 ##parallelizing runs
-#pool = ProcessingPool(4)
-#results = pool.map(model_run,filename)
+pool = ProcessingPool(4)
+results = pool.map(model_run,filename)
