@@ -512,15 +512,10 @@ def model_run(filename):
     
 
 
+model_run(rootpath+'data/households_censustracts/tract_14203.csv')
 #filename= glob.glob(rootpath+'data/households_censustracts/*.csv')
-todo = [200,300,401,403,404,501,502,600,700,800,\
-    1500,1600,1700,1801,1802,1901,1902,2000,2100,2200,2300,2500,2600,\
-        13508,13707,13802,13901,14100,14202,14202,14301,14302,14401,14402,\
-            14502,14503,14606,14607,14608,14609,14611,14612,14613,14614,14615,\
-                14700,14801,14802,14803,51600]
 
-todonames = [rootpath+'data/households_censustracts/tract_'+str(i)+'.csv' for i in todo]
 
 ##parallelizing runs
-pool = ProcessingPool(4)
-results = pool.map(model_run,todonames)
+#pool = ProcessingPool(4)
+#results = pool.map(model_run,filename)
