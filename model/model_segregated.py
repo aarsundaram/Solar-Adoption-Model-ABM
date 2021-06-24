@@ -13,8 +13,7 @@ from pathos.multiprocessing import ProcessingPool
 from households import Household
 import resource 
 import sys 
-import json 
-import logging
+import glob
 
 sys.setrecursionlimit(10000)
 
@@ -547,19 +546,20 @@ rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'       
 #sample.step()
 # can run upto 48 steps (4 years) 
 
-
 def model_run(filename):
+    print(f'starting model run for {filename}')
     sample = AdoptionModel(filename)
     for i in range(36):
         sample.step()
     rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'       
     outputfile = filename[90:len(filename)]                              
     sample.datacollector_df.to_csv(rootpath+'experiment/segregated/'+str(outputfile))
+    print(f'finished model run for {filename}')
     
 
 #model_run(rootpath+'data/households_censustracts/tract_100.csv')
 
-#filename= glob.glob(rootpath+'data/households_censustracts/*.csv')
-##parallelizing runs
-#pool = ProcessingPool(4)
-#results = pool.map(model_run,filename)
+filename= glob.glob(rootpath+'data/households_censustracts/*.csv')
+#parallelizing runs
+pool = ProcessingPool(4)
+results = pool.map(model_run,filename)
