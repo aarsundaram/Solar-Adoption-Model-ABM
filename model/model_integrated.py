@@ -62,8 +62,8 @@ class AdoptionModel(Model):
 
         """ 
         #rootpath = 'c:\\Users\\Gamelab\\Desktop\\RT\\Others\\Thesis\\Thesis_coding\\ABM\\Solar-Adoption-Agent-Based-Model\\' 
-        #rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Agent-based-Model/'
-        rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'
+        rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'
+        #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'
         
         #df = pd.read_csv(rootpath+'data\\households_subset\\subset_initialized_latlonvalues.csv')
         #df = pd.read_csv(rootpath+'data/households_subset/subset_initialized_latlonvalues.csv')
@@ -495,8 +495,8 @@ class AdoptionModel(Model):
 
 ################################################################################################################
 #rootpath = 'c:\\Users\\Gamelab\\Desktop\\RT\\Others\\Thesis\\Thesis_coding\\ABM\\Solar-Adoption-Agent-Based-Model\\'  #windows
-#rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Agent-based-Model/'                                            #server 
-rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'                                       #mac 
+rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'                                          #server 
+#rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'                                       #mac 
 #rootpath = 'c:\\Users\\Gamelab\\Desktop\\RT\\Others\\Thesis\\Thesis_coding\\ABM\\Solar-Adoption-Agent-Based-Model\\' 
 #rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Agent-based-Model/'
 #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Agent-based-Model/'
@@ -509,8 +509,8 @@ def model_run(filename):
     sample = AdoptionModel(filename)
     for i in range(36):
         sample.step()
-    rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'       
-    outputfile = filename[90:len(filename)]                              
+    rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'
+    outputfile = filename[83:len(filename)]                              
     sample.datacollector_df.to_csv(rootpath+'experiment/integrated/'+str(outputfile))
     
 
@@ -518,5 +518,5 @@ def model_run(filename):
 
 filename= glob.glob(rootpath+'data/households_censustracts/*.csv')
 ##parallelizing runs
-pool = ProcessingPool(4)
+pool = ProcessingPool(8)
 results = pool.map(model_run,filename)
