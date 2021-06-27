@@ -54,26 +54,30 @@ class Household(Agent):
         Models the evolution of a household's perceived behavioral control over the action of
         investing in a solar panel 
         """
-
+        timestep_to_year = {0:2015,1:2015,2:2016,3:2017,4:2018,5:2019,6:2020,7:2021,8:2022,9:2023,10:2024,11:2025,12:2026}
         #values that have to be changed to make dynamic 
-        TimeStepYear = self.timestep_to_year()
+        TimeStepYear = timestep_to_year[self.model.schedule.steps]
         #south facing: 
         annualsolarproduction_dict = {1:1238,2:2475,3:3714,4:4954,5:6189,6:7427,7:8665,8:9904,9:10904,10:11004,11:12004,12:13004}
         AvgPricePerWattSolar_dict = {2015:3.9,                 #2015
                                      2016:3.6,                 #2016
                                          2017:3.3,             #2017
                                              2018:3.1,         #2018
-                                               2019:3.1}       #2019
+                                               2019:3.1,
+                                               2020: 3.1,
+                                               2021: 2.73}       #2019
         RetailElectricityRate_dict = {2015: 0.1854, 
                                     2016: 0.1758,
                                     2017: 0.1803,
                                     2018: 0.1852,
-                                    2019: 0.1794
+                                    2019: 0.1794,
+                                    2020: 0.1717,
+                                    2021: 0.2190
                                     }
 
         AvgPricePerWattSolar = AvgPricePerWattSolar_dict[TimeStepYear] 
         RetailElectricityRate = RetailElectricityRate_dict[TimeStepYear]
-        FederalTaxCredit = 0.55  # new york tax + federal tax credits (see document) 
+        FederalTaxCredit = 0.55  # new york tax 25% of cost + federal tax credits: 26% (see document) 
         ProductionRatioOfPanel = 1.03 
         UtilityRebate = 1000 # dollars
         

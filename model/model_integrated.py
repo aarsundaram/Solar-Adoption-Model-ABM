@@ -40,7 +40,9 @@ class AdoptionModel(Model):
         self.pbc_weight = 0.1409
         self.att_weight = 0.4717
         self.sn_weight = 0.1081  # TODO : substitute these values with ones from regression results : DONE 
-        self.intention_threshold = 0.75
+        
+
+        self.intention_threshold = {0:0.80,1:0.80,2:0.95,3:0.95,4:0.95,5:0.95,6:0.95,7:0.95,8:0.95,9:0.95}
 
 
         self.datacollector_df = pd.DataFrame(columns = ['timestep','case_id','attitude','subnorms','pbc','adoption_status','geoid'])
@@ -446,7 +448,7 @@ class AdoptionModel(Model):
         """
         self.schedule.step()  ## this is what increments step by 1, else it prints previous step 
 
-        print(self.schedule.steps)
+        #print(self.schedule.steps)
         print('Timestep:', self.schedule.steps)
 
         if self.schedule.steps!=0:
@@ -481,7 +483,7 @@ class AdoptionModel(Model):
             household.intention = self.tpb_constant+ (self.pbc_weight * household.pbc) + (self.att_weight * household.attitude) + (self.sn_weight * household.subnorms)
 
             # check both thresholds:
-            if (household.intention >= self.intention_threshold) and (household.pbc>=0.8):
+            if (household.intention >= self.intention_threshold[self.schedule.steps]) and (household.pbc>=0.8):
                 household.adoption_status = 1 
             
             ## log everything into a dictionary which collects data:
@@ -503,19 +505,19 @@ rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'       
 
 
 def model_run(filename):
+    print(f'Executing for {filename[90:]}')
     sample = AdoptionModel(filename)
-    for i in range(36):
+    for i in range(8):
         sample.step()
     rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'                                       #mac 
     outputfile = filename[90:]                              
-    sample.datacollector_df.to_csv(rootpath+'experiment/integrated/'+str(outputfile))
-    
+    sample.datacollector_df.to_csv(rootpath+'experiment/integrated/baseline/'+str(outputfile))
+    print(f'Finished exporting for {filename[90:]}')
 
 
-model_run(rootpath+'data/households_censustracts/tract_14203.csv')
-#filename= glob.glob(rootpath+'data/households_censustracts/*.csv')
-
+#model_run(rootpath+'data/households_censustracts/tract_14203.csv')
+filename= glob.glob(rootpath+'data/households_censustracts/*.csv')
 
 ##parallelizing runs
-#pool = ProcessingPool(4)
-#results = pool.map(model_run,filename)
+pool = ProcessingPool(4)
+results = pool.map(model_run,filename)

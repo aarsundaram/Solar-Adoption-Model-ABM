@@ -42,7 +42,8 @@ class AdoptionModel(Model):
         self.pbc_weight = 0.1409
         self.att_weight = 0.4717
         self.sn_weight = 0.1081  # TODO : substitute these values with ones from regression results : DONE 
-        self.intention_threshold = 0.75
+
+        self.intention_threshold = {0:0.80,1:0.80,2:0.95,3:0.95,4:0.95,5:0.95,6:0.95,7:0.95,8:0.95,9:0.95}
 
 
         self.datacollector_df = pd.DataFrame(columns = ['timestep','case_id','attitude','subnorms','pbc','adoption_status','geoid'])
@@ -523,7 +524,7 @@ class AdoptionModel(Model):
             household.intention = self.tpb_constant+ (self.pbc_weight * household.pbc) + (self.att_weight * household.attitude) + (self.sn_weight * household.subnorms)
 
             # check both thresholds:
-            if (household.intention >= self.intention_threshold) and (household.pbc>=0.8):
+            if (household.intention >= self.intention_threshold[self.schedule.steps]) and (household.pbc>=0.8):
                 household.adoption_status = 1 
             
             ## log everything into a dictionary which collects data:
@@ -549,11 +550,11 @@ rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'       
 def model_run(filename):
     print(f'starting model run for {filename}')
     sample = AdoptionModel(filename)
-    for i in range(36):
+    for i in range(8):
         sample.step()
     rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'       
     outputfile = filename[90:len(filename)]                              
-    sample.datacollector_df.to_csv(rootpath+'experiment/segregated/'+str(outputfile))
+    sample.datacollector_df.to_csv(rootpath+'experiment/segregated/baseline/'+str(outputfile))
     print(f'finished model run for {filename}')
     
 
