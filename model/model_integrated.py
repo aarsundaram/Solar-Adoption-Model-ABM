@@ -42,7 +42,8 @@ class AdoptionModel(Model):
         self.sn_weight = 0.1081  # TODO : substitute these values with ones from regression results : DONE 
         
 
-        self.intention_threshold = {0:0.80,1:0.80,2:0.95,3:0.95,4:0.95,5:0.95,6:0.95,7:0.95,8:0.95,9:0.95}
+        #self.intention_threshold = {0:0.80,1:0.80,2:0.95,3:0.95,4:0.95,5:0.95,6:0.95,7:0.95,8:0.95,9:0.95}
+        self.intention_threshold = {0:0.80,1:0.80,2:0.80,3:0.80,4:0.85,5:0.90,6:0.92,7:0.92,8:0.93,9:0.94}
 
 
         self.datacollector_df = pd.DataFrame(columns = ['timestep','case_id','attitude','subnorms','pbc','adoption_status','geoid'])
@@ -417,25 +418,25 @@ class AdoptionModel(Model):
             for i in random.choices(agent.geolinks,k=min(len(agent.geolinks),5)):
                 tempG.add_edge(agent,i)
             for edge in list(tempG.edges()):
-                circles_of_influence(edge,mu=0.5)
+                circles_of_influence(edge,mu=0.2)
 
             tempG = nx.Graph()
             for i in agent.circle1:
                 tempG.add_edge(agent,i)
             for edge in list(tempG.edges()):
-                circles_of_influence(edge,mu=0.8)
+                circles_of_influence(edge,mu=0.5)
 
             tempG = nx.Graph()
             for i in random.choices(agent.circle2, k=min(15,len(agent.circle2))):
                 tempG.add_edge(agent,i)
             for edge in list(tempG.edges()):
-                circles_of_influence(edge, mu=0.2)
+                circles_of_influence(edge, mu=0.1)
 
             tempG = nx.Graph()
             for i in random.choices(agent.circle3,k=min(20,len(agent.circle3))):
                 tempG.add_edge(agent,i)
             for edge in list(tempG.edges()):
-                circles_of_influence(edge,mu=0.1)
+                circles_of_influence(edge,mu=0.05)
 
 
     def subnorms_evolution(self):
