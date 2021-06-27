@@ -532,15 +532,15 @@ rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'             
 
 
 def model_run(filename):
-    print(f'Executing for {filename[90:]}')
+    print(f'Executing for {filename[83:]}')   ## for server, it is filename[83:]. For mac it is: filename[90:]
     sample = AdoptionModel(filename)
     for i in range(8):
         sample.step()
     #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'                                       #mac 
     rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'        
-    outputfile = filename[90:]                              
+    outputfile = filename[83:]                              
     sample.datacollector_df.to_csv(rootpath+'experiment/integrated/baseline/'+str(outputfile))
-    print(f'Finished exporting for {filename[90:]}')
+    print(f'Finished exporting for {filename[83:]}')
 
 
 #model_run(rootpath+'data/households_censustracts/tract_14203.csv')
