@@ -90,7 +90,7 @@ class AdoptionModel(Model):
                              geoid = row['GEOID10'],
                              tract = row['TRACTCE10'],
                              bgid = row['bgid'],
-                             ToleratedPayBackPeriod= row['toleratedpayback'],
+                             ToleratedPayBackPeriod= 3,
                              circle1=[],
                              circle2=[],
                              circle3=[],
