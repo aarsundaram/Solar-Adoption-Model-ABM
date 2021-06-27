@@ -43,8 +43,8 @@ class AdoptionModel(Model):
         self.att_weight = 0.4717
         self.sn_weight = 0.1081  # TODO : substitute these values with ones from regression results : DONE 
 
-        self.intention_threshold = {0:0.80,1:0.80,2:0.95,3:0.95,4:0.95,5:0.95,6:0.95,7:0.95,8:0.95,9:0.95}
-
+        self.intention_threshold = {0:0.80,1:0.80,2:0.80,3:0.80,4:0.85,5:0.90,6:0.92,7:0.92,8:0.93,9:0.94}
+        #self.intention_threshold = 0.80
 
         self.datacollector_df = pd.DataFrame(columns = ['timestep','case_id','attitude','subnorms','pbc','adoption_status','geoid'])
         self.interactions_df = pd.DataFrame(columns=['timestep','first_agent','agent1_initial_attitude','agent1_final_attitude','second_agent','agent2_initial_attitude','agent2_final_attitude'])
@@ -106,7 +106,7 @@ class AdoptionModel(Model):
         #                      adoption_status = 0)
             
 
-            self.incomegroups_dict[agent.income].append(agent)
+            #self.incomegroups_dict[agent.income].append(agent)
             ## not added to the schedule or anything. just there for interaction.
 
 
@@ -434,25 +434,25 @@ class AdoptionModel(Model):
             for i in random.choices(agent.geolinks,k=min(len(agent.geolinks),5)):
                 tempG.add_edge(agent,i)
             for edge in list(tempG.edges()):
-                circles_of_influence(edge,mu=0.5)
+                circles_of_influence(edge,mu=0.2)
 
             tempG = nx.Graph()
             for i in agent.circle1:
                 tempG.add_edge(agent,i)
             for edge in list(tempG.edges()):
-                circles_of_influence(edge,mu=0.8)
+                circles_of_influence(edge,mu=0.5)
 
             tempG = nx.Graph()
             for i in random.choices(agent.circle2, k=min(15,len(agent.circle2))):
                 tempG.add_edge(agent,i)
             for edge in list(tempG.edges()):
-                circles_of_influence(edge, mu=0.2)
+                circles_of_influence(edge, mu=0.1)
 
             tempG = nx.Graph()
             for i in random.choices(agent.circle3,k=min(20,len(agent.circle3))):
                 tempG.add_edge(agent,i)
             for edge in list(tempG.edges()):
-                circles_of_influence(edge,mu=0.1)
+                circles_of_influence(edge,mu=0.05)
 
         
 
@@ -524,12 +524,9 @@ class AdoptionModel(Model):
             household.intention = self.tpb_constant+ (self.pbc_weight * household.pbc) + (self.att_weight * household.attitude) + (self.sn_weight * household.subnorms)
 
             # check both thresholds:
-            if self.schedule.steps <=1:
-                if household.intention >= 0.80:
-                    household.adoption_status = 1
-            else:
-                if (household.intention >= self.intention_threshold[self.schedule.steps]) and (household.pbc>=0.8):
-                    household.adoption_status = 1 
+            
+            if (household.intention >= self.intention_threshold[self.schedule.steps]) and (household.pbc>=0.8):
+                household.adoption_status = 1 
             
             ## log everything into a dictionary which collects data:
             new_record = {'timestep':self.schedule.steps,'case_id':household.unique_id,'attitude':household.attitude,\
@@ -558,7 +555,7 @@ def model_run(filename):
         sample.step()
     rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'       
     outputfile = filename[90:]                              
-    sample.datacollector_df.to_csv(rootpath+'experiment/segregated/baseline/'+str(outputfile))
+    sample.datacollector_df.to_csv(rootpath+'experiment/segregated/mu02/'+str(outputfile))
     print(f'finished model run for {filename[90:]}')
     
 
