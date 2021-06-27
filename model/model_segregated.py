@@ -83,30 +83,30 @@ class AdoptionModel(Model):
             #print(income,type(income))
             self.incomegroups_dict[income]=[]
 
-        #for _,row in households_main.iterrows():
-        #    agent = Household(unique_id = str(row['case_id']),
-        #                     model = self, 
-        #                     income = row['income'],
-        #                     age= row['age'],
-        #                     size= row['household_'],
-        #                     ami_category = row['ami_catego'],
-        #                     elec_consumption= row['elec_consu'],
-        #                     attitude = row['attitude'],
-                            #  attitude_uncertainty = 1-abs(row['attitude']),
-                            #  pbc = row['pbc'],
-                            #  subnorms = row['subnorms'],
-                            #  geoid = row['GEOID10'],
-                            #  tract = row['TRACTCE10'],
-                            #  bgid = row['bgid'],
-                            #  ToleratedPayBackPeriod= 6,
-                            #  circle1=[],
-                            #  circle2=[],
-                            #  circle3=[],
-                            #  geolinks=[],
-                            #  adoption_status = 0)
+        for _,row in households_main.iterrows():
+            agent = Household(unique_id = str(row['case_id']),
+                            model = self, 
+                            income = row['income'],
+                            age= row['age'],
+                            size= row['household_'],
+                            ami_category = row['ami_catego'],
+                            elec_consumption= row['elec_consu'],
+                            attitude = row['attitude'],
+                             attitude_uncertainty = 1-abs(row['attitude']),
+                             pbc = row['pbc'],
+                             subnorms = row['subnorms'],
+                             geoid = row['GEOID10'],
+                             tract = row['TRACTCE10'],
+                             bgid = row['bgid'],
+                             ToleratedPayBackPeriod= 6,
+                             circle1=[],
+                             circle2=[],
+                             circle3=[],
+                             geolinks=[],
+                             adoption_status = 0)
             
-            
-            #self.incomegroups_dict[agent.income].append(agent)
+
+            self.incomegroups_dict[agent.income].append(agent)
             ## not added to the schedule or anything. just there for interaction.
 
 
@@ -204,7 +204,7 @@ class AdoptionModel(Model):
                 
                 self.geoid_income_dict[(agent.geoid,agent.income)].append(agent)
                 self.bgid_income_dict[(agent.bgid,agent.income)].append(agent)
-                self.incomegroups_dict[agent.income].append(agent)     ## added from the main group 
+                #self.incomegroups_dict[agent.income].append(agent)     ## added from the main group 
                 
                 # preparing tpb dictionaries
                 self.attitude_dict[agent]={}
