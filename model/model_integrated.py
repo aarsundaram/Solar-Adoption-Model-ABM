@@ -483,8 +483,12 @@ class AdoptionModel(Model):
             household.intention = self.tpb_constant+ (self.pbc_weight * household.pbc) + (self.att_weight * household.attitude) + (self.sn_weight * household.subnorms)
 
             # check both thresholds:
-            if (household.intention >= self.intention_threshold[self.schedule.steps]) and (household.pbc>=0.8):
-                household.adoption_status = 1 
+            if self.schedule.steps <= 1: 
+                if household.intention >= 0.80:
+                    household.adoption_status = 1
+            else:
+                if (household.intention >= self.intention_threshold[self.schedule.steps]) and (household.pbc>=0.8):
+                    household.adoption_status = 1 
             
             ## log everything into a dictionary which collects data:
             new_record = {'timestep':self.schedule.steps,'case_id':household.unique_id,'attitude':household.attitude,\
