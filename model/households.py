@@ -113,9 +113,8 @@ class Household(Agent):
 
 
     def step(self):
-        if self in self.model.schedule.agents:
-            if self.adoption_status==0:
-                self.pbc_evolution()
+        if self.adoption_status==0:
+            self.pbc_evolution()
 
 
     def __str__(self):

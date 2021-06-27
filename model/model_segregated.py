@@ -83,27 +83,27 @@ class AdoptionModel(Model):
             #print(income,type(income))
             self.incomegroups_dict[income]=[]
 
-        for _,row in households_main.iterrows():
-            agent = Household(unique_id = str(row['case_id']),
-                            model = self, 
-                            income = row['income'],
-                            age= row['age'],
-                            size= row['household_'],
-                            ami_category = row['ami_catego'],
-                            elec_consumption= row['elec_consu'],
-                            attitude = row['attitude'],
-                             attitude_uncertainty = 1-abs(row['attitude']),
-                             pbc = row['pbc'],
-                             subnorms = row['subnorms'],
-                             geoid = row['GEOID10'],
-                             tract = row['TRACTCE10'],
-                             bgid = row['bgid'],
-                             ToleratedPayBackPeriod= 6,
-                             circle1=[],
-                             circle2=[],
-                             circle3=[],
-                             geolinks=[],
-                             adoption_status = 0)
+        # for _,row in households_main.iterrows():
+        #     agent = Household(unique_id = str(row['case_id']),
+        #                     model = self, 
+        #                     income = row['income'],
+        #                     age= row['age'],
+        #                     size= row['household_'],
+        #                     ami_category = row['ami_catego'],
+        #                     elec_consumption= row['elec_consu'],
+        #                     attitude = row['attitude'],
+        #                      attitude_uncertainty = 1-abs(row['attitude']),
+        #                      pbc = row['pbc'],
+        #                      subnorms = row['subnorms'],
+        #                      geoid = row['GEOID10'],
+        #                      tract = row['TRACTCE10'],
+        #                      bgid = row['bgid'],
+        #                      ToleratedPayBackPeriod= 6,
+        #                      circle1=[],
+        #                      circle2=[],
+        #                      circle3=[],
+        #                      geolinks=[],
+        #                      adoption_status = 0)
             
 
             self.incomegroups_dict[agent.income].append(agent)
@@ -204,7 +204,7 @@ class AdoptionModel(Model):
                 
                 self.geoid_income_dict[(agent.geoid,agent.income)].append(agent)
                 self.bgid_income_dict[(agent.bgid,agent.income)].append(agent)
-                #self.incomegroups_dict[agent.income].append(agent)     ## added from the main group 
+                self.incomegroups_dict[agent.income].append(agent)     ## added from the main group 
                 
                 # preparing tpb dictionaries
                 self.attitude_dict[agent]={}
@@ -552,14 +552,14 @@ rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'       
 # can run upto 48 steps (4 years) 
 
 def model_run(filename):
-    print(f'starting model run for {filename}')
+    print(f'starting model run for {filename[90:]}')
     sample = AdoptionModel(filename)
     for i in range(8):
         sample.step()
     rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'       
-    outputfile = filename[90:len(filename)]                              
+    outputfile = filename[90:]                              
     sample.datacollector_df.to_csv(rootpath+'experiment/segregated/baseline/'+str(outputfile))
-    print(f'finished model run for {filename}')
+    print(f'finished model run for {filename[90:]}')
     
 
 #model_run(rootpath+'data/households_censustracts/tract_100.csv')
