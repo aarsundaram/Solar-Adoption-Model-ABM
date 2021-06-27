@@ -75,7 +75,30 @@ class AdoptionModel(Model):
 
         households_main = pd.read_csv(rootpath+'data/households_main/households_main_initialized.csv')
         households_main = households_main.drop(columns='Unnamed: 0')
+        for _,row in households_main.iterrows():
+            agent = Household(unique_id = str(row['case_id']),
+                             model = self, 
+                             income = row['income'],
+                             age= row['age'],
+                             size= row['household_'],
+                             ami_category = row['ami_catego'],
+                             elec_consumption= row['elec_consu'],
+                             attitude = row['attitude'],
+                             attitude_uncertainty = 1-abs(row['attitude']),
+                             pbc = row['pbc'],
+                             subnorms = row['subnorms'],
+                             geoid = row['GEOID10'],
+                             tract = row['TRACTCE10'],
+                             bgid = row['bgid'],
+                             ToleratedPayBackPeriod= row['toleratedpayback'],
+                             circle1=[],
+                             circle2=[],
+                             circle3=[],
+                             geolinks=[],
+                             adoption_status = 0)
 
+            if agent:
+                self.all_households.append(agent)
 
         # create an empty dictionary for storing agents neighborhood-wise (geoid) 
         for geoid in list(df['GEOID10'].unique()):
@@ -163,7 +186,7 @@ class AdoptionModel(Model):
                 
 
                 #preparing dictioanries that will enable interactions 
-                self.all_households.append(agent)
+                #self.all_households.append(agent)
                 self.geoid_dict[agent.geoid].append(agent)
                 self.bgid_dict[agent.bgid].append(agent)
                 
@@ -524,5 +547,5 @@ def model_run(filename):
 filename= glob.glob(rootpath+'data/households_censustracts/*.csv')
 
 ##parallelizing runs
-pool = ProcessingPool(4)
+pool = ProcessingPool(8)
 results = pool.map(model_run,filename)
