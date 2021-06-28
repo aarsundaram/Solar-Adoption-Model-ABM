@@ -43,7 +43,12 @@ class AdoptionModel(Model):
         self.att_weight = 0.4717
         self.sn_weight = 0.1081  # TODO : substitute these values with ones from regression results : DONE 
 
-        self.intention_threshold = {0:0.80,1:0.80,2:0.81,3:0.83,4:0.87,5:0.90,6:0.92,7:0.92,8:0.93,9:0.94}
+        # doesn't work 
+        #self.intention_threshold = {0:0.80,1:0.80,2:0.81,3:0.83,4:0.87,5:0.90,6:0.92,7:0.92,8:0.93,9:0.94}
+        
+        #final trial for calibration
+        self.intention_threshold = {0:0.80,1:0.80,2:0.82,3:0.87,4:0.89,5:0.91,6:0.92,7:0.93,8:0.93,9:0.94}
+        
         #self.intention_threshold = 0.80
 
         self.datacollector_df = pd.DataFrame(columns = ['timestep','case_id','attitude','subnorms','pbc','adoption_status','geoid'])
@@ -555,7 +560,7 @@ def model_run(filename):
         sample.step()
     rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'       
     outputfile = filename[90:]                              
-    sample.datacollector_df.to_csv(rootpath+'experiment/segregated/scenario1/tax46'+str(outputfile))
+    sample.datacollector_df.to_csv(rootpath+'experiment/segregated/calibration/'+str(outputfile))
     print(f'finished model run for {filename[90:]}')
     
 
