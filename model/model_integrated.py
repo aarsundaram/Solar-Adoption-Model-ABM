@@ -43,8 +43,11 @@ class AdoptionModel(Model):
         
 
         #self.intention_threshold = {0:0.80,1:0.80,2:0.95,3:0.95,4:0.95,5:0.95,6:0.95,7:0.95,8:0.95,9:0.95}
-        self.intention_threshold = {0:0.80,1:0.80,2:0.81,3:0.83,4:0.87,5:0.90,6:0.92,7:0.92,8:0.93,9:0.94}
+        #doesn't work
+        #self.intention_threshold = {0:0.80,1:0.80,2:0.81,3:0.83,4:0.87,5:0.90,6:0.92,7:0.92,8:0.93,9:0.94}
 
+        #final trial for calibration
+        self.intention_threshold = {0:0.80,1:0.80,2:0.82,3:0.87,4:0.89,5:0.91,6:0.92,7:0.93,8:0.93,9:0.94}
 
         self.datacollector_df = pd.DataFrame(columns = ['timestep','case_id','attitude','subnorms','pbc','adoption_status','geoid'])
         self.interactions_df = pd.DataFrame(columns=['timestep','first_agent','agent1_initial_attitude','agent1_final_attitude','second_agent','agent2_initial_attitude','agent2_final_attitude'])
