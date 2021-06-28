@@ -543,7 +543,7 @@ def model_run(filename):
     #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'                                       #mac 
     rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'        
     outputfile = filename[83:]                              
-    sample.datacollector_df.to_csv(rootpath+'experiment/integrated/scenario1/tax51/'+str(outputfile))
+    sample.datacollector_df.to_csv(rootpath+'experiment/integrated/scenario1/tax56/'+str(outputfile))
     print(f'Finished exporting for {filename[83:]}')
 
 
