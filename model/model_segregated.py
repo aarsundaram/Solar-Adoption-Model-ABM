@@ -43,7 +43,7 @@ class AdoptionModel(Model):
         self.att_weight = 0.4717
         self.sn_weight = 0.1081  # TODO : substitute these values with ones from regression results : DONE 
 
-        self.intention_threshold = {0:0.80,1:0.80,2:0.80,3:0.80,4:0.85,5:0.90,6:0.92,7:0.92,8:0.93,9:0.94}
+        self.intention_threshold = {0:0.80,1:0.80,2:0.81,3:0.83,4:0.87,5:0.90,6:0.92,7:0.92,8:0.93,9:0.94}
         #self.intention_threshold = 0.80
 
         self.datacollector_df = pd.DataFrame(columns = ['timestep','case_id','attitude','subnorms','pbc','adoption_status','geoid'])
