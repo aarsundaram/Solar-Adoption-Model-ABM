@@ -77,7 +77,8 @@ class Household(Agent):
 
         AvgPricePerWattSolar = AvgPricePerWattSolar_dict[TimeStepYear] 
         RetailElectricityRate = RetailElectricityRate_dict[TimeStepYear]
-        FederalTaxCredit = 0.55  # new york tax 25% of cost + federal tax credits: 26% (see document) 
+        #FederalTaxCredit = 0.55  # new york tax 25% of cost + federal tax credits: 26% (see document) 
+        FederalTaxCredit = 0.46  
         ProductionRatioOfPanel = 1.03 
         UtilityRebate = 1000 # dollars
         

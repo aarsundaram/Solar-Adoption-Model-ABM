@@ -555,7 +555,7 @@ def model_run(filename):
         sample.step()
     rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'       
     outputfile = filename[90:]                              
-    sample.datacollector_df.to_csv(rootpath+'experiment/segregated/mu02/'+str(outputfile))
+    sample.datacollector_df.to_csv(rootpath+'experiment/segregated/scenario1/tax46'+str(outputfile))
     print(f'finished model run for {filename[90:]}')
     
 
