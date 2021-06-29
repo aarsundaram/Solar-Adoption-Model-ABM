@@ -7,6 +7,7 @@ import random
 #from networkx.generators.small import house_graph
 import pandas as pd
 import networkx as nx
+import math
 #import multiprocessing as mp 
 import dill 
 from pathos.multiprocessing import ProcessingPool
@@ -15,6 +16,7 @@ from households import Household
 import sys 
 import glob
 
+random.seed(123)
 sys.setrecursionlimit(10000)
 
 class AdoptionModel(Model):
@@ -27,6 +29,7 @@ class AdoptionModel(Model):
         self.space = None
         self.run_time = 8
         self.G = nx.Graph()
+        self.seeded_agents = []
 
 
         ## Interaction Groups 
@@ -212,6 +215,14 @@ class AdoptionModel(Model):
                 self.subnorms_dict[agent][self.schedule.steps].append(agent.subnorms)        
 
 
+        # TODO: Scenario5: random seeding
+        seed_agents = random.choices(self.schedule.agents,k=math.ceil(0.001*len(df)))
+        if len(seed_agents)>0:
+            for agent in seed_agents:
+                self.seeded_agents.append(agent.unique_id)
+                agent.adoption_status = 1
+
+
         #######################################
         ######## CIRCLES OF INFLUENCE #########
         #######################################
@@ -260,6 +271,9 @@ class AdoptionModel(Model):
             agent.circle2 = bgid_neighs
             agent.circle3= thirdcircle
             agent.circle1 = circle1
+
+        
+        
 
 
     def attitude_evolution(self):
@@ -536,6 +550,7 @@ rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'             
 
 
 def model_run(filename):
+    seeded_df = pd.DataFrame()
     print(f'Executing for {filename[83:]}')   ## for server, it is filename[83:]. For mac it is: filename[90:]
     sample = AdoptionModel(filename)
     for i in range(8):
@@ -543,7 +558,9 @@ def model_run(filename):
     #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'                                       #mac 
     rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'        
     outputfile = filename[83:]                              
-    sample.datacollector_df.to_csv(rootpath+'experiment/integrated/scenario2/'+str(outputfile))
+    sample.datacollector_df.to_csv(rootpath+'experiment/integrated/scenario5/'+str(outputfile))
+    seeded_df['seeded_agents']= sample.seeded_agents
+    seeded_df.to_csv(rootpath+'experiment/integrated/scenario5/seeds/'+str(outputfile))
     print(f'Finished exporting for {filename[83:]}')
 
 
