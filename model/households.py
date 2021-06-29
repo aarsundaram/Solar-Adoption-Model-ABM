@@ -79,11 +79,11 @@ class Household(Agent):
         RetailElectricityRate = RetailElectricityRate_dict[TimeStepYear]
         #FederalTaxCredit = 0.55  # new york tax 25% of cost + federal tax credits: 26% (see document) 
         #FederalTaxCredit = 0.46  
-        #FederalTaxCredit = 0.51
+        FederalTaxCredit = 0.51
         #FederalTaxCredit = 0.56
 
         #Scenario-2 : Income based tax-credit
-        FederalTaxCredit= {'less75k':0.56, '75to100k':0.51,'100to150k':0.46,'150kplus':0.46}
+        #FederalTaxCredit= {'less75k':0.56, '75to100k':0.51,'100to150k':0.46,'150kplus':0.46}
         ProductionRatioOfPanel = 1.03 
         UtilityRebate = 1000 # dollars
         
@@ -94,7 +94,7 @@ class Household(Agent):
         SystemSize = (AnnualElecConsumption / ProductionRatioOfPanel)  # production rate of panels in NY = 1.23 
                                                                         # gives SystemSize in Watts 
 
-        NetPanelCost = ((SystemSize * AvgPricePerWattSolar) - UtilityRebate) * (FederalTaxCredit[self.income]) 
+        NetPanelCost = ((SystemSize * AvgPricePerWattSolar) - UtilityRebate) * (FederalTaxCredit) 
 
         AnnualSolarProduction = annualsolarproduction_dict[int(SystemSize/1000)+4]   # TODO : info in solar_prices excel sheet in solar_potential
 
