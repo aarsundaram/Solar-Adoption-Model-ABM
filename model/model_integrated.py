@@ -275,17 +275,18 @@ class AdoptionModel(Model):
         ## TODO: SCENARIO-04 : Seeding Influencers 
 
         ## 4A: Seeding Influencers randomly (from any income group)
-        sample_number = math.ceil(0.01*len(df))  ##number instead of percentage 
-
+        sample_number = math.ceil(0.001*len(df))  ##number instead of percentage 
+        print('beginning scenario-04')
         #using degree centrality as a measure of influence in an integrated network 
         influencers_anygroup = nx.degree_centrality(self.social_network)
         influencers_anygroup2 = sorted(influencers_anygroup.items(), key=lambda x:x[1]) ## getting all influencers 
         influencer_caseids = [influencers_anygroup2[i][0] for i in range(len(influencers_anygroup2))][-sample_number:]
-
-        for influencer in influencer_caseids:
-            agent = self.schedule._agents[influencer]
+        #print('len of influencer caseids')
+        for agent in influencer_caseids:
+            #agent = self.schedule._agents[influencer]
             self.seeded_agents.append(agent.unique_id)
             agent.adoption_status =1 
+        print('finished seeding')
 
         
         # ##4B: LOW-INCOME GROUP INFLUENCERS SEEDING
