@@ -235,7 +235,8 @@ class AdoptionModel(Model):
             #initialize upto 10 neighs that will be in their network
             neighs = random.choices(self.geoid_dict[agent.geoid],k=min(len(self.geoid_dict[agent.geoid]),10))
             neighs = [i for i in neighs if i!=agent]
-
+            for neigh in neighs:
+                self.social_network.add_edge(agent,neigh)
             
             #circle2 at bgid level 
             #initialize upto 50 of them who will be in their network.
@@ -247,6 +248,8 @@ class AdoptionModel(Model):
             circle1 = random.choices(bgid_neighs,k=min(3,len(bgid_neighs)))
             #remove these core members from the bgid_neighs to prevent double interaction
             bgid_neighs = [i for i in bgid_neighs if i not in circle1]
+            for bgid_neigh in bgid_neighs:
+                self.social_network.add_edge(agent,bgid_neigh)
 
 
 
@@ -263,7 +266,12 @@ class AdoptionModel(Model):
                 if i not in list(self.G.nodes()):
                     self.G.add_node(i)
             
+            for hh in thirdcircle:
+                self.social_network.add_edge(agent,hh)
 
+            for core in circle1:
+                self.social_network.add_edge(agent,core) 
+                
             # initializing the networks.
             #no edges at this stage. only at the attitude evolution step
             agent.geolinks = neighs
