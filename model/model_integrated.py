@@ -283,38 +283,38 @@ class AdoptionModel(Model):
         ## TODO: SCENARIO-04 : Seeding Influencers 
 
         ## 4A: Seeding Influencers randomly (from any income group)
-        sample_number = math.ceil(0.001*len(df))  ##number instead of percentage 
-        print('beginning scenario-04')
-        #using degree centrality as a measure of influence in an integrated network 
-        influencers_anygroup = nx.degree_centrality(self.social_network)
-        influencers_anygroup2 = sorted(influencers_anygroup.items(), key=lambda x:x[1]) ## getting all influencers 
-        influencer_caseids = [influencers_anygroup2[i][0] for i in range(len(influencers_anygroup2))][-sample_number:]
-        print('len of influencer caseids',len(influencer_caseids))
-        for agent in influencer_caseids:
-            #agent = self.schedule._agents[influencer]
-            self.seeded_agents.append(agent.unique_id)
-            agent.adoption_status =1 
-        print('finished seeding')
+        # sample_number = math.ceil(0.001*len(df))  ##number instead of percentage 
+        # print('beginning scenario-04')
+        # #using degree centrality as a measure of influence in an integrated network 
+        # influencers_anygroup = nx.degree_centrality(self.social_network)
+        # influencers_anygroup2 = sorted(influencers_anygroup.items(), key=lambda x:x[1]) ## getting all influencers 
+        # influencer_caseids = [influencers_anygroup2[i][0] for i in range(len(influencers_anygroup2))][-sample_number:]
+        # print('len of influencer caseids',len(influencer_caseids))
+        # for agent in influencer_caseids:
+        #     #agent = self.schedule._agents[influencer]
+        #     self.seeded_agents.append(agent.unique_id)
+        #     agent.adoption_status =1 
+        # print('finished seeding')
 
         
         # ##4B: LOW-INCOME GROUP INFLUENCERS SEEDING
-        # sample_number = math.ceil(0.001*len(df))  ##number instead of percentage 
-        # influencers_anygroup = nx.degree_centrality(self.social_network)
-        # influencers_anygroup2 = sorted(influencers_anygroup.items(), key=lambda x:x[1]) ## getting all influencers
-        # ##get caseids 
-        # influencer_caseids = [influencers_anygroup2[i][0] for i in range(len(influencers_anygroup2))]
-        # influencers_lowincome = []
-        # for influencer in influencer_caseids:
-        #     agent = self.schedule._agents[influencer]
-        #     if agent.income == 'less75k':
-        #         influencers_lowincome.append(agent)
+        sample_number = math.ceil(0.001*len(df))  ##number instead of percentage 
+        influencers_anygroup = nx.degree_centrality(self.social_network)
+        influencers_anygroup2 = sorted(influencers_anygroup.items(), key=lambda x:x[1]) ## getting all influencers
+        ##get caseids 
+        influencer_caseids = [influencers_anygroup2[i][0] for i in range(len(influencers_anygroup2))]
+        influencers_lowincome = []
+        for agent in influencer_caseids:
+            #agent = self.schedule._agents[influencer]
+            if agent.income == 'less75k':
+                influencers_lowincome.append(agent)
 
-        # ##seed 0.1% of the agents (of the sample number size)
-        # seed_agents = influencers_lowincome[-sample_number:]
-        # if len(seed_agents)>0:
-        #     for agent in seed_agents:
-        #         self.seeded_agents.append(agent.unique_id)
-        #         agent.adoption_status=1
+        ##seed 0.1% of the agents (of the sample number size)
+        seed_agents = influencers_lowincome[-sample_number:]
+        if len(seed_agents)>0:
+            for agent in seed_agents:
+                self.seeded_agents.append(agent.unique_id)
+                agent.adoption_status=1
 
         # ##4C: LOW & MIDDLE INCOME GROUP INFLUENCERS SEEDING
         # sample_number = math.ceil(0.001*len(df))  ##number instead of percentage 
@@ -617,9 +617,9 @@ def model_run(filename):
     #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'                                       #mac 
     rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'        
     outputfile = filename[83:]                              
-    sample.datacollector_df.to_csv(rootpath+'experiment/integrated/scenario4/scenario4a/'+str(outputfile))
+    sample.datacollector_df.to_csv(rootpath+'experiment/integrated/scenario4/scenario4b/'+str(outputfile))
     seeded_df['seeded_agents']= sample.seeded_agents
-    seeded_df.to_csv(rootpath+'experiment/integrated/scenario4/scenario4a/seeds/'+str(outputfile))
+    seeded_df.to_csv(rootpath+'experiment/integrated/scenario4/scenario4b/seeds/'+str(outputfile))
     print(f'Finished exporting for {filename[83:]}')
 
 
