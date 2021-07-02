@@ -29,7 +29,7 @@ class AdoptionModel(Model):
         self.space = None
         self.run_time = 8
         self.G = nx.Graph()
-        self.seeded_agents = []
+        #self.seeded_agents = []
 
 
         ## Interaction Groups 
@@ -216,11 +216,11 @@ class AdoptionModel(Model):
 
 
         # TODO: Scenario5: random seeding
-        seed_agents = random.choices(self.schedule.agents,k=math.ceil(0.001*len(df)))
-        if len(seed_agents)>0:
-            for agent in seed_agents:
-                self.seeded_agents.append(agent.unique_id)
-                agent.adoption_status = 1
+        # seed_agents = random.choices(self.schedule.agents,k=math.ceil(0.001*len(df)))
+        # if len(seed_agents)>0:
+        #     for agent in seed_agents:
+        #         self.seeded_agents.append(agent.unique_id)
+        #         agent.adoption_status = 1
 
 
         #######################################
@@ -550,7 +550,7 @@ rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'             
 
 
 def model_run(filename):
-    seeded_df = pd.DataFrame()
+    #seeded_df = pd.DataFrame()
     print(f'Executing for {filename[83:]}')   ## for server, it is filename[83:]. For mac it is: filename[90:]
     sample = AdoptionModel(filename)
     for i in range(8):
@@ -558,9 +558,9 @@ def model_run(filename):
     #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'                                       #mac 
     rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'        
     outputfile = filename[83:]                              
-    sample.datacollector_df.to_csv(rootpath+'experiment/integrated/scenario5/'+str(outputfile))
-    seeded_df['seeded_agents']= sample.seeded_agents
-    seeded_df.to_csv(rootpath+'experiment/integrated/scenario5/seeds/'+str(outputfile))
+    sample.datacollector_df.to_csv(rootpath+'experiment/integrated/scenario2_2/'+str(outputfile))
+    #seeded_df['seeded_agents']= sample.seeded_agents
+    #seeded_df.to_csv(rootpath+'experiment/integrated/scenario5/seeds/'+str(outputfile))
     print(f'Finished exporting for {filename[83:]}')
 
 
