@@ -95,7 +95,7 @@ class Household(Agent):
         SystemSize = (AnnualElecConsumption / ProductionRatioOfPanel)  # production rate of panels in NY = 1.23 
                                                                         # gives SystemSize in Watts 
 
-        NetPanelCost = ((SystemSize * AvgPricePerWattSolar) - UtilityRebate) * (FederalTaxCredit) 
+        NetPanelCost = ((SystemSize * AvgPricePerWattSolar) - UtilityRebate) * (FederalTaxCredit[self.income]) 
 
         AnnualSolarProduction = annualsolarproduction_dict[int(SystemSize/1000)+4]   # TODO : info in solar_prices excel sheet in solar_potential
 
