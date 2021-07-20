@@ -17,6 +17,7 @@ import sys
 import glob
 
 random.seed(123)
+
 sys.setrecursionlimit(10000)
 
 class AdoptionModel(Model):
@@ -201,14 +202,14 @@ class AdoptionModel(Model):
         #TODO: Scenario-03: Seed Individuals by income-group 
 
         ## 3A : LOW INCOME GROUP SEEDING
-        sample_percentage = 0.001 ## modify this
-        #get agents in the tract who are low income. then sample from 0.1% of them 
-        low_income_agents = [hh for hh in self.schedule.agents if hh.income=='less75k']
-        seed_agents = random.choices(low_income_agents, k=math.ceil(sample_percentage*len(df)))
-        if len(seed_agents)>0:
-            for agent in seed_agents:
-                self.seeded_agents.append(agent.unique_id)
-                agent.adoption_status = 1
+        # sample_percentage = 0.001 ## modify this
+        # #get agents in the tract who are low income. then sample from 0.1% of them 
+        # low_income_agents = [hh for hh in self.schedule.agents if hh.income=='less75k']
+        # seed_agents = random.choices(low_income_agents, k=math.ceil(sample_percentage*len(df)))
+        # if len(seed_agents)>0:
+        #     for agent in seed_agents:
+        #         self.seeded_agents.append(agent.unique_id)
+        #         agent.adoption_status = 1
 
         # ## 3B: LOW & MIDDLE-INCOME GROUP SEEDING:
         # # same sample percentage as above
@@ -609,7 +610,7 @@ rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'             
 
 
 def model_run(filename):
-    seeded_df = pd.DataFrame()
+    #seeded_df = pd.DataFrame()
     print(f'Executing for {filename[83:]}')   ## for server, it is filename[83:]. For mac it is: filename[90:]
     sample = AdoptionModel(filename)
     for i in range(8):
@@ -617,9 +618,9 @@ def model_run(filename):
     #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'                                       #mac 
     rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'        
     outputfile = filename[83:]                              
-    sample.datacollector_df.to_csv(rootpath+'experiment/integrated/scenario3/scenario3a/'+str(outputfile))
-    seeded_df['seeded_agents']= sample.seeded_agents
-    seeded_df.to_csv(rootpath+'experiment/integrated/scenario3/scenario3a/seeds/'+str(outputfile))
+    sample.datacollector_df.to_csv(rootpath+'experiment/random_seed/rs234/integrated/'+str(outputfile))
+    #seeded_df['seeded_agents']= sample.seeded_agents
+    #seeded_df.to_csv(rootpath+'experiment/integrated/scenario3/scenario3a/seeds/'+str(outputfile))
     print(f'Finished exporting for {filename[83:]}')
 
 
