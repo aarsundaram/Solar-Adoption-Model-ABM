@@ -4,6 +4,7 @@ from mesa import Model
 from mesa.time import BaseScheduler
 from mesa.space import NetworkGrid
 import random
+import math 
 #from networkx.generators.small import house_graph
 import pandas as pd
 import networkx as nx
@@ -14,6 +15,8 @@ from households import Household
 import resource 
 import sys 
 import glob
+
+random.seed(234)
 
 sys.setrecursionlimit(10000)
 
@@ -29,7 +32,8 @@ class AdoptionModel(Model):
         self.space = None
         self.run_time = 8
         self.G = nx.Graph()
-
+        self.social_network = nx.Graph()  ## contains the initialized network of all agents in the tract
+        self.seeded_agents = []
 
         ## Interaction Groups 
         self.geoid_income_dict = {}                        ## Geographic interaction
@@ -70,8 +74,8 @@ class AdoptionModel(Model):
 
         """ 
         #rootpath = 'c:\\Users\\Gamelab\\Desktop\\RT\\Others\\Thesis\\Thesis_coding\\ABM\\Solar-Adoption-Agent-Based-Model\\' 
-        #rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Agent-based-Model/'
-        rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'
+        rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Agent-based-Model/'
+        #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'
         
         #df = pd.read_csv(rootpath+'data\\households_subset\\subset_initialized_latlonvalues.csv')
         #df = pd.read_csv(rootpath+'data/households_subset/subset_initialized_latlonvalues.csv')
@@ -87,34 +91,6 @@ class AdoptionModel(Model):
         for income in incomegroups:
             #print(income,type(income))
             self.incomegroups_dict[income]=[]
-
-        # for _,row in households_main.iterrows():
-        #     agent = Household(unique_id = str(row['case_id']),
-        #                     model = self, 
-        #                     income = row['income'],
-        #                     age= row['age'],
-        #                     size= row['household_'],
-        #                     ami_category = row['ami_catego'],
-        #                     elec_consumption= row['elec_consu'],
-        #                     attitude = row['attitude'],
-        #                      attitude_uncertainty = 1-abs(row['attitude']),
-        #                      pbc = row['pbc'],
-        #                      subnorms = row['subnorms'],
-        #                      geoid = row['GEOID10'],
-        #                      tract = row['TRACTCE10'],
-        #                      bgid = row['bgid'],
-        #                      ToleratedPayBackPeriod= 6,
-        #                      circle1=[],
-        #                      circle2=[],
-        #                      circle3=[],
-        #                      geolinks=[],
-        #                      adoption_status = 0)
-            
-
-            #self.incomegroups_dict[agent.income].append(agent)
-            ## not added to the schedule or anything. just there for interaction.
-
-
 
         # create an empty dictionary for storing agents neighborhood-wise (geoid) 
         for geoid in list(df['GEOID10'].unique()):
@@ -203,7 +179,7 @@ class AdoptionModel(Model):
                 
                 self.schedule.add(agent)
                 self.G.add_node(agent, label=agent.unique_id)   # main graph holds all agent nodes
-                
+                self.social_network.add_node(agent,label=agent.unique_id)                
 
                 #preparing dictioanries that will enable interactions 
                 
@@ -229,6 +205,41 @@ class AdoptionModel(Model):
                 self.subnorms_dict[agent][self.schedule.steps].append(agent.subnorms)        
 
 
+        # TODO: Scenario-05 :  Seed Random Individuals (1% of the population) at the start of the runtime
+        #seed_agents = random.choices(self.schedule.agents,k=math.ceil(0.001*len(df)))
+        #if len(seed_agents)>0:
+        #    for agent in seed_agents:
+        #        self.seeded_agents.append(agent.unique_id)  #keep the unique ids of each agent in this list for exporting
+                #seed them: turn them into adopters 
+        #        agent.adoption_status = 1 
+
+        # TODO: Scenario-03 :  Seed Individuals by Income-group (1% of the population) at the start of the runtime
+        
+        #### 3A. LOW INCOME GROUP SEEDING
+        
+        #sample_percentage = 0.001  ## modify parameter
+
+        # # #get agents in the tract who are in the low income group and then sample 1% of them
+        # low_income_agents = [hh for hh in self.schedule.agents if hh.income=='less75k'] 
+        # seed_agents = random.choices(low_income_agents,k=math.ceil(sample_percentage*len(df)))
+        # if len(seed_agents)>0:
+        #     for agent in seed_agents:
+        #         self.seeded_agents.append(agent.unique_id)  #keep the unique ids of each agent in this list for exporting
+        #         #seed them: turn them into adopters 
+        #         agent.adoption_status = 1 
+
+        #### 3B. LOW & MIDDLE-INCOME GROUP SEEDING
+        
+        # #get agents in the tract who are in the low income group and then sample 1% of them
+        # low_middle_income_agents = [hh for hh in self.schedule.agents if hh.income in ['less75k','75to100k']] 
+        # seed_agents = random.choices(low_middle_income_agents,k=math.ceil(sample_percentage*len(df)))
+        # if len(seed_agents)>0:
+        #     for agent in seed_agents:
+        #         self.seeded_agents.append(agent.unique_id)  #keep the unique ids of each agent in this list for exporting
+        #         #seed them: turn them into adopters 
+        #         agent.adoption_status = 1 
+
+
         #######################################
         ######## CIRCLES OF INFLUENCE #########
         #######################################
@@ -242,7 +253,8 @@ class AdoptionModel(Model):
             #initialize upto 10 neighs that will be in their network
             neighs = random.choices(self.geoid_income_dict[(agent.geoid,agent.income)],k=min(len(self.geoid_income_dict[(agent.geoid,agent.income)]),10))
             neighs = [i for i in neighs if i!=agent]
-
+            for neigh in neighs:
+                self.social_network.add_edge(agent,neigh)
             
             #circle2 at bgid level 
             #initialize upto 50 of them who will be in their network.
@@ -254,7 +266,8 @@ class AdoptionModel(Model):
             circle1 = random.choices(bgid_neighs,k=min(3,len(bgid_neighs)))
             #remove these core members from the bgid_neighs to prevent double interaction
             bgid_neighs = [i for i in bgid_neighs if i not in circle1]
-
+            for bgid_neigh in bgid_neighs:
+                self.social_network.add_edge(agent,bgid_neigh)
 
 
             #circle3 at albany level
@@ -271,6 +284,11 @@ class AdoptionModel(Model):
                 if i not in list(self.G.nodes()):  
                     self.G.add_node(i)
             
+            for hh in thirdcircle:
+                self.social_network.add_edge(agent,hh)
+
+            for core in circle1:
+                self.social_network.add_edge(agent,core)
 
             # initializing the networks.
             #no edges at this stage. only at the attitude evolution step
@@ -279,6 +297,73 @@ class AdoptionModel(Model):
             agent.circle3= thirdcircle
             agent.circle1 = circle1
 
+
+
+        ## after initializing circles of influence for the whole tract, you can now find the influencers 
+
+        # TODO: Scenario-04 :  Seed Influential Individuals by Income-group (0.1% of the population) at the start of the runtime
+        #### 4A. Random Influeners (of any income group)
+        #for segregated network, we use betweenness centrality measure 
+        # print('Runnning Scenario-04A')
+        # sample_percentage = math.ceil(0.001*len(df))  ## modify parameter 
+
+        # influencers_anygroup = nx.betweenness_centrality(self.social_network)
+        # influencers_anygroup2=sorted(influencers_anygroup.items(), key=lambda x:x[1])[-sample_percentage:]  ## get top 5 caseids of influencers
+        # influencer_caseids = [influencers_anygroup2[i][0] for i in range(len(influencers_anygroup2))][-sample_percentage:]  ##chosen influencers 
+    
+        # for agent in influencer_caseids:
+        #     #agent = self.schedule._agents[influencer]
+        #     self.seeded_agents.append(agent.unique_id)  ##add to log in seeds dataframe
+        #     agent.adoption_status = 1 ##seed the chosen agent 
+
+        # print('finished seeding agents')
+
+        #### 4B. LOW INCOME GROUP INFLUENCERS SEEDING
+        # print('Running Scenario 4B')
+        # sample_percentage = math.ceil(0.001*len(df))  ## modify parameter 
+  
+        # #for segregated network, we use betweenness centrality measure 
+        # influencers_anygroup = nx.betweenness_centrality(self.social_network)
+        # influencers_anygroup2=sorted(influencers_anygroup.items(), key=lambda x:x[1]) ## get all caseids of influencers
+        # influencer_caseids = [influencers_anygroup2[i][0] for i in range(len(influencers_anygroup2))]  ##returns the agent object
+        # influencers_lowincome = []
+        # for agent in influencer_caseids:
+        #     #agent = self.schedule._agents[influencer]  ##getting the agent by the unique_id 
+        #     if agent.income == 'less75k':
+        #         influencers_lowincome.append(agent)  ## influencers low income contains agents NOT unique_ids
+
+        # ## seed 0.1% of these influencer agents
+        # seed_agents = influencers_lowincome[-sample_percentage:]
+        # if len(seed_agents)>0:
+        #     for agent in seed_agents:
+        #         self.seeded_agents.append(agent.unique_id)  #keep the unique ids of each agent in this list for exporting
+        #         #seed them: turn them into adopters 
+        #         agent.adoption_status = 1          
+        # print('Finished Seeding for 4B')
+
+
+        #### 4C. LOW & MIDDLE-INCOME GROUP SEEDING
+        # print('Starting Scenario04-C')
+        # sample_percentage = math.ceil(0.001*len(df))  ## modify parameter 
+
+        # #for segregated network, we use betweenness centrality measure 
+        # influencers_anygroup = nx.betweenness_centrality(self.social_network)
+        # influencers_anygroup2=sorted(influencers_anygroup.items(), key=lambda x:x[1]) ## get all caseids of influencers
+        # influencer_caseids = [influencers_anygroup2[i][0] for i in range(len(influencers_anygroup2))]
+        # influencers_low_middle_income = []
+        # for agent in influencer_caseids:
+        #     #agent = self.schedule._agents[influencer]  ##getting the agent by the unique_id 
+        #     if agent.income in ['less75k','75to100k']:
+        #         influencers_low_middle_income.append(agent)  ## influencers low income contains agents NOT unique_ids
+
+        # ## seed 0.1% of these influencer agents
+        # seed_agents = influencers_low_middle_income[-sample_percentage:]
+        # if len(seed_agents)>0:
+        #     for agent in seed_agents:
+        #         self.seeded_agents.append(agent.unique_id)  #keep the unique ids of each agent in this list for exporting
+        #         #seed them: turn them into adopters 
+        #         agent.adoption_status = 1          
+        # print('Finished Executing Scenario4C')
 
     def attitude_evolution(self):
         """
@@ -553,20 +638,27 @@ rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'       
 #sample.step()
 # can run upto 48 steps (4 years) 
 
+
 def model_run(filename):
-    print(f'starting model run for {filename[90:]}')
+    #seeded_df = pd.DataFrame()
+    print(f'Executing for {filename[83:]}')
     sample = AdoptionModel(filename)
     for i in range(8):
         sample.step()
-    rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'       
-    outputfile = filename[90:]                              
-    sample.datacollector_df.to_csv(rootpath+'experiment/segregated/calibration/'+str(outputfile))
-    print(f'finished model run for {filename[90:]}')
+    #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'
+    rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'        
+    outputfile = filename[83:]                              
+    sample.datacollector_df.to_csv(rootpath+'experiment/random_seed/rs234/segregated/'+str(outputfile))
+    #seeded_df['seeded_agents']=sample.seeded_agents
+    #seeded_df.to_csv(rootpath+'experiment/segregated/scenario3/scenario3b/seeds/'+str(outputfile))    
+    print(f'Finished exporting for {filename[83:]}')
+
     
 
 #model_run(rootpath+'data/households_censustracts/tract_100.csv')
 
 filename= glob.glob(rootpath+'data/households_censustracts/*.csv')
 #parallelizing runs
-pool = ProcessingPool(4)
+pool = ProcessingPool(10)
 results = pool.map(model_run,filename)
+
