@@ -16,7 +16,7 @@ from households import Household
 import sys 
 import glob
 
-random.seed(123)
+random.seed(234)
 
 sys.setrecursionlimit(10000)
 
