@@ -12,7 +12,7 @@ import networkx as nx
 import dill 
 from pathos.multiprocessing import ProcessingPool
 from households import Household
-import resource 
+#import resource 
 import sys 
 import glob
 
@@ -73,8 +73,7 @@ class AdoptionModel(Model):
         - Block-wise households are stored in dictionary form
 
         """ 
-        #rootpath = 'c:\\Users\\Gamelab\\Desktop\\RT\\Others\\Thesis\\Thesis_coding\\ABM\\Solar-Adoption-Agent-Based-Model\\' 
-        rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Agent-based-Model/'
+        rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'    
         #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'
         
         #df = pd.read_csv(rootpath+'data\\households_subset\\subset_initialized_latlonvalues.csv')
@@ -628,12 +627,9 @@ class AdoptionModel(Model):
                     
 
 ################################################################################################################
-#rootpath = 'c:\\Users\\Gamelab\\Desktop\\RT\\Others\\Thesis\\Thesis_coding\\ABM\\Solar-Adoption-Agent-Based-Model\\'  #windows
-rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Agent-based-Model/'                                            #server 
 #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'                                       #mac 
 #rootpath = 'c:\\Users\\Gamelab\\Desktop\\RT\\Others\\Thesis\\Thesis_coding\\ABM\\Solar-Adoption-Agent-Based-Model\\' 
-#rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Agent-based-Model/'
-#rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Agent-based-Model/'
+rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'
 
 #sample.step()
 # can run upto 48 steps (4 years) 
