@@ -629,8 +629,8 @@ class AdoptionModel(Model):
 
 ################################################################################################################
 #rootpath = 'c:\\Users\\Gamelab\\Desktop\\RT\\Others\\Thesis\\Thesis_coding\\ABM\\Solar-Adoption-Agent-Based-Model\\'  #windows
-#rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Agent-based-Model/'                                            #server 
-rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'                                       #mac 
+rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Agent-based-Model/'                                            #server 
+#rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'                                       #mac 
 #rootpath = 'c:\\Users\\Gamelab\\Desktop\\RT\\Others\\Thesis\\Thesis_coding\\ABM\\Solar-Adoption-Agent-Based-Model\\' 
 #rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Agent-based-Model/'
 #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Agent-based-Model/'
