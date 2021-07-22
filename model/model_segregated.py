@@ -16,7 +16,7 @@ from households import Household
 import sys 
 import glob
 
-random.seed(890)
+random.seed(900)
 
 sys.setrecursionlimit(10000)
 
@@ -644,7 +644,7 @@ def model_run(filename):
     #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'
     rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'        
     outputfile = filename[83:]                              
-    sample.datacollector_df.to_csv(rootpath+'experiment/random_seed/rs890/segregated/'+str(outputfile))
+    sample.datacollector_df.to_csv(rootpath+'experiment/random_seed/rs900/segregated/'+str(outputfile))
     #seeded_df['seeded_agents']=sample.seeded_agents
     #seeded_df.to_csv(rootpath+'experiment/segregated/scenario3/scenario3b/seeds/'+str(outputfile))    
     print(f'Finished exporting for {filename[83:]}')
