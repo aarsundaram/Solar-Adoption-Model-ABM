@@ -5,7 +5,7 @@ import random
 from mesa.space import NetworkGrid
 from networkx.classes.function import selfloop_edges
 
-random.seed(567)
+random.seed(678)
 # ---------------------------------------------------------------
 class Household(Agent):
  
