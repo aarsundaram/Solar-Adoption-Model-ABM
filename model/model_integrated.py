@@ -16,7 +16,7 @@ from households import Household
 import sys 
 import glob
 
-random.seed(910)
+random.seed(123)
 
 sys.setrecursionlimit(10000)
 
@@ -610,7 +610,7 @@ rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'             
 
 
 def model_run(filename):
-    #seeded_df = pd.DataFrame()
+    seeded_df = pd.DataFrame()
     print(f'Executing for {filename[83:]}')   ## for server, it is filename[83:]. For mac it is: filename[90:]
     sample = AdoptionModel(filename)
     for i in range(8):
@@ -618,9 +618,9 @@ def model_run(filename):
     #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'                                       #mac 
     rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'        
     outputfile = filename[83:]                              
-    sample.datacollector_df.to_csv(rootpath+'experiment/random_seed/rs910/integrated/'+str(outputfile))
+    sample.datacollector_df.to_csv(rootpath+'experiment/integrated/scenario5_1pp/'+str(outputfile))
     #seeded_df['seeded_agents']= sample.seeded_agents
-    #seeded_df.to_csv(rootpath+'experiment/integrated/scenario3/scenario3a/seeds/'+str(outputfile))
+    seeded_df.to_csv(rootpath+'experiment/integrated/scenario5_1pp/seeds/'+str(outputfile))
     print(f'Finished exporting for {filename[83:]}')
 
 
