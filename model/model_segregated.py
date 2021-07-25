@@ -205,7 +205,7 @@ class AdoptionModel(Model):
 
 
         #TODO: Scenario-05 :  Seed Random Individuals (1% of the population) at the start of the runtime
-        seed_agents = random.choices(self.schedule.agents,k=math.ceil(0.02*len(df)))
+        seed_agents = random.choices(self.schedule.agents,k=math.ceil(0.01*len(df)))
         if len(seed_agents)>0:
            for agent in seed_agents:
                self.seeded_agents.append(agent.unique_id)  #keep the unique ids of each agent in this list for exporting
@@ -644,9 +644,9 @@ def model_run(filename):
     #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'
     rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'        
     outputfile = filename[83:]                              
-    sample.datacollector_df.to_csv(rootpath+'experiment/segregated/scenario5_2pp/'+str(outputfile))
+    sample.datacollector_df.to_csv(rootpath+'experiment/segregated/scenario5_1pp/'+str(outputfile))
     seeded_df['seeded_agents']=sample.seeded_agents
-    seeded_df.to_csv(rootpath+'experiment/segregated/scenario5_2pp/seeds/'+str(outputfile))    
+    seeded_df.to_csv(rootpath+'experiment/segregated/scenario5_1pp/seeds/'+str(outputfile))    
     print(f'Finished exporting for {filename[83:]}')
 
     
