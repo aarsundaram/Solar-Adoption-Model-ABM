@@ -204,28 +204,28 @@ class AdoptionModel(Model):
                 self.subnorms_dict[agent][self.schedule.steps].append(agent.subnorms)        
 
 
-        #TODO: Scenario-05 :  Seed Random Individuals (1% of the population) at the start of the runtime
-        seed_agents = random.choices(self.schedule.agents,k=math.ceil(0.01*len(df)))
-        if len(seed_agents)>0:
-           for agent in seed_agents:
-               self.seeded_agents.append(agent.unique_id)  #keep the unique ids of each agent in this list for exporting
-                #seed them: turn them into adopters 
-               agent.adoption_status = 1 
+        # #TODO: Scenario-05 :  Seed Random Individuals (1% of the population) at the start of the runtime
+        # seed_agents = random.choices(self.schedule.agents,k=math.ceil(0.01*len(df)))
+        # if len(seed_agents)>0:
+        #    for agent in seed_agents:
+        #        self.seeded_agents.append(agent.unique_id)  #keep the unique ids of each agent in this list for exporting
+        #         #seed them: turn them into adopters 
+        #        agent.adoption_status = 1 
 
         # TODO: Scenario-03 :  Seed Individuals by Income-group (1% of the population) at the start of the runtime
         
         #### 3A. LOW INCOME GROUP SEEDING
         
-        #sample_percentage = 0.001  ## modify parameter
+        sample_percentage = 0.01  ## modify parameter
 
-        # # #get agents in the tract who are in the low income group and then sample 1% of them
-        # low_income_agents = [hh for hh in self.schedule.agents if hh.income=='less75k'] 
-        # seed_agents = random.choices(low_income_agents,k=math.ceil(sample_percentage*len(df)))
-        # if len(seed_agents)>0:
-        #     for agent in seed_agents:
-        #         self.seeded_agents.append(agent.unique_id)  #keep the unique ids of each agent in this list for exporting
-        #         #seed them: turn them into adopters 
-        #         agent.adoption_status = 1 
+        # #get agents in the tract who are in the low income group and then sample 1% of them
+        low_income_agents = [hh for hh in self.schedule.agents if hh.income=='less75k'] 
+        seed_agents = random.choices(low_income_agents,k=math.ceil(sample_percentage*len(df)))
+        if len(seed_agents)>0:
+            for agent in seed_agents:
+                self.seeded_agents.append(agent.unique_id)  #keep the unique ids of each agent in this list for exporting
+                #seed them: turn them into adopters 
+                agent.adoption_status = 1 
 
         #### 3B. LOW & MIDDLE-INCOME GROUP SEEDING
         
@@ -644,9 +644,9 @@ def model_run(filename):
     #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'
     rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'        
     outputfile = filename[83:]                              
-    sample.datacollector_df.to_csv(rootpath+'experiment/segregated/scenario5_1pp/'+str(outputfile))
+    sample.datacollector_df.to_csv(rootpath+'experiment/segregated/scenario3a_1pp/'+str(outputfile))
     seeded_df['seeded_agents']=sample.seeded_agents
-    seeded_df.to_csv(rootpath+'experiment/segregated/scenario5_1pp/seeds/'+str(outputfile))    
+    seeded_df.to_csv(rootpath+'experiment/segregated/scenario3a_1pp/seeds/'+str(outputfile))    
     print(f'Finished exporting for {filename[83:]}')
 
     
