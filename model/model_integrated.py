@@ -202,7 +202,7 @@ class AdoptionModel(Model):
         #TODO: Scenario-03: Seed Individuals by income-group 
 
         ## 3A : LOW INCOME GROUP SEEDING
-        sample_percentage = 0.01 ## modify this
+        sample_percentage = 0.02 ## modify this
         #get agents in the tract who are low income. then sample from 0.1% of them 
         low_income_agents = [hh for hh in self.schedule.agents if hh.income=='less75k']
         seed_agents = random.choices(low_income_agents, k=math.ceil(sample_percentage*len(df)))
@@ -618,9 +618,9 @@ def model_run(filename):
     #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'                                       #mac 
     rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'        
     outputfile = filename[83:]                              
-    sample.datacollector_df.to_csv(rootpath+'experiment/integrated/scenario3a_1pp/'+str(outputfile))
+    sample.datacollector_df.to_csv(rootpath+'experiment/integrated/scenario3a_2pp/'+str(outputfile))
     #seeded_df['seeded_agents']= sample.seeded_agents
-    seeded_df.to_csv(rootpath+'experiment/integrated/scenario3a_1pp/seeds/'+str(outputfile))
+    seeded_df.to_csv(rootpath+'experiment/integrated/scenario3a_2pp/seeds/'+str(outputfile))
     print(f'Finished exporting for {filename[83:]}')
 
 
