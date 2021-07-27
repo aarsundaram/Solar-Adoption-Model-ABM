@@ -304,7 +304,7 @@ class AdoptionModel(Model):
         ### 4A. Random Influeners (of any income group)
         #for segregated network, we use betweenness centrality measure 
         print('Runnning Scenario-04A')
-        sample_percentage = math.ceil(0.01*len(df))  ## modify parameter 
+        sample_percentage = math.ceil(0.02*len(df))  ## modify parameter 
 
         influencers_anygroup = nx.betweenness_centrality(self.social_network)
         influencers_anygroup2=sorted(influencers_anygroup.items(), key=lambda x:x[1])[-sample_percentage:]  ## get top 5 caseids of influencers
@@ -644,9 +644,9 @@ def model_run(filename):
     #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'
     rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'        
     outputfile = filename[83:]                              
-    sample.datacollector_df.to_csv(rootpath+'experiment/segregated/scenario4a_1pp/'+str(outputfile))
+    sample.datacollector_df.to_csv(rootpath+'experiment/segregated/scenario4a_2pp/'+str(outputfile))
     seeded_df['seeded_agents']=sample.seeded_agents
-    seeded_df.to_csv(rootpath+'experiment/segregated/scenario4a_1pp/seeds/'+str(outputfile))    
+    seeded_df.to_csv(rootpath+'experiment/segregated/scenario4a_2pp/seeds/'+str(outputfile))    
     print(f'Finished exporting for {filename[83:]}')
 
     
