@@ -216,7 +216,7 @@ class AdoptionModel(Model):
         
         #### 3A. LOW INCOME GROUP SEEDING
         
-        sample_percentage = 0.02  ## modify parameter
+        # sample_percentage = 0.02  ## modify parameter
 
         # # #get agents in the tract who are in the low income group and then sample 1% of them
         # low_income_agents = [hh for hh in self.schedule.agents if hh.income=='less75k'] 
@@ -229,14 +229,14 @@ class AdoptionModel(Model):
 
         #### 3B. LOW & MIDDLE-INCOME GROUP SEEDING
         
-        #get agents in the tract who are in the low income group and then sample 1% of them
-        low_middle_income_agents = [hh for hh in self.schedule.agents if hh.income in ['less75k','75to100k']] 
-        seed_agents = random.choices(low_middle_income_agents,k=math.ceil(sample_percentage*len(df)))
-        if len(seed_agents)>0:
-            for agent in seed_agents:
-                self.seeded_agents.append(agent.unique_id)  #keep the unique ids of each agent in this list for exporting
-                #seed them: turn them into adopters 
-                agent.adoption_status = 1 
+        # #get agents in the tract who are in the low income group and then sample 1% of them
+        # low_middle_income_agents = [hh for hh in self.schedule.agents if hh.income in ['less75k','75to100k']] 
+        # seed_agents = random.choices(low_middle_income_agents,k=math.ceil(sample_percentage*len(df)))
+        # if len(seed_agents)>0:
+        #     for agent in seed_agents:
+        #         self.seeded_agents.append(agent.unique_id)  #keep the unique ids of each agent in this list for exporting
+        #         #seed them: turn them into adopters 
+        #         agent.adoption_status = 1 
 
 
         #######################################
@@ -301,21 +301,21 @@ class AdoptionModel(Model):
         ## after initializing circles of influence for the whole tract, you can now find the influencers 
 
         # TODO: Scenario-04 :  Seed Influential Individuals by Income-group (0.1% of the population) at the start of the runtime
-        #### 4A. Random Influeners (of any income group)
+        ### 4A. Random Influeners (of any income group)
         #for segregated network, we use betweenness centrality measure 
-        # print('Runnning Scenario-04A')
-        # sample_percentage = math.ceil(0.001*len(df))  ## modify parameter 
+        print('Runnning Scenario-04A')
+        sample_percentage = math.ceil(0.01*len(df))  ## modify parameter 
 
-        # influencers_anygroup = nx.betweenness_centrality(self.social_network)
-        # influencers_anygroup2=sorted(influencers_anygroup.items(), key=lambda x:x[1])[-sample_percentage:]  ## get top 5 caseids of influencers
-        # influencer_caseids = [influencers_anygroup2[i][0] for i in range(len(influencers_anygroup2))][-sample_percentage:]  ##chosen influencers 
+        influencers_anygroup = nx.betweenness_centrality(self.social_network)
+        influencers_anygroup2=sorted(influencers_anygroup.items(), key=lambda x:x[1])[-sample_percentage:]  ## get top 5 caseids of influencers
+        influencer_caseids = [influencers_anygroup2[i][0] for i in range(len(influencers_anygroup2))][-sample_percentage:]  ##chosen influencers 
     
-        # for agent in influencer_caseids:
-        #     #agent = self.schedule._agents[influencer]
-        #     self.seeded_agents.append(agent.unique_id)  ##add to log in seeds dataframe
-        #     agent.adoption_status = 1 ##seed the chosen agent 
+        for agent in influencer_caseids:
+            #agent = self.schedule._agents[influencer]
+            self.seeded_agents.append(agent.unique_id)  ##add to log in seeds dataframe
+            agent.adoption_status = 1 ##seed the chosen agent 
 
-        # print('finished seeding agents')
+        print('finished seeding agents')
 
         #### 4B. LOW INCOME GROUP INFLUENCERS SEEDING
         # print('Running Scenario 4B')
@@ -644,9 +644,9 @@ def model_run(filename):
     #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'
     rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'        
     outputfile = filename[83:]                              
-    sample.datacollector_df.to_csv(rootpath+'experiment/segregated/scenario3b_2pp/'+str(outputfile))
+    sample.datacollector_df.to_csv(rootpath+'experiment/segregated/scenario4a_1pp/'+str(outputfile))
     seeded_df['seeded_agents']=sample.seeded_agents
-    seeded_df.to_csv(rootpath+'experiment/segregated/scenario3b_2pp/seeds/'+str(outputfile))    
+    seeded_df.to_csv(rootpath+'experiment/segregated/scenario4a_1pp/seeds/'+str(outputfile))    
     print(f'Finished exporting for {filename[83:]}')
 
     
