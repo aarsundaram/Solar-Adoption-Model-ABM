@@ -318,51 +318,51 @@ class AdoptionModel(Model):
         # print('finished seeding agents')
 
         #### 4B. LOW INCOME GROUP INFLUENCERS SEEDING
-        print('Running Scenario 4B')
-        sample_percentage = math.ceil(0.02*len(df))  ## modify parameter 
+        # print('Running Scenario 4B')
+        # sample_percentage = math.ceil(0.02*len(df))  ## modify parameter 
   
-        #for segregated network, we use betweenness centrality measure 
-        influencers_anygroup = nx.betweenness_centrality(self.social_network)
-        influencers_anygroup2=sorted(influencers_anygroup.items(), key=lambda x:x[1]) ## get all caseids of influencers
-        influencer_caseids = [influencers_anygroup2[i][0] for i in range(len(influencers_anygroup2))]  ##returns the agent object
-        influencers_lowincome = []
-        for agent in influencer_caseids:
-            #agent = self.schedule._agents[influencer]  ##getting the agent by the unique_id 
-            if agent.income == 'less75k':
-                influencers_lowincome.append(agent)  ## influencers low income contains agents NOT unique_ids
-
-        ## seed 0.1% of these influencer agents
-        seed_agents = influencers_lowincome[-sample_percentage:]
-        if len(seed_agents)>0:
-            for agent in seed_agents:
-                self.seeded_agents.append(agent.unique_id)  #keep the unique ids of each agent in this list for exporting
-                #seed them: turn them into adopters 
-                agent.adoption_status = 1          
-        print('Finished Seeding for 4B')
-
-
-        #### 4C. LOW & MIDDLE-INCOME GROUP SEEDING
-        # print('Starting Scenario04-C')
-        # sample_percentage = math.ceil(0.001*len(df))  ## modify parameter 
-
         # #for segregated network, we use betweenness centrality measure 
         # influencers_anygroup = nx.betweenness_centrality(self.social_network)
         # influencers_anygroup2=sorted(influencers_anygroup.items(), key=lambda x:x[1]) ## get all caseids of influencers
-        # influencer_caseids = [influencers_anygroup2[i][0] for i in range(len(influencers_anygroup2))]
-        # influencers_low_middle_income = []
+        # influencer_caseids = [influencers_anygroup2[i][0] for i in range(len(influencers_anygroup2))]  ##returns the agent object
+        # influencers_lowincome = []
         # for agent in influencer_caseids:
         #     #agent = self.schedule._agents[influencer]  ##getting the agent by the unique_id 
-        #     if agent.income in ['less75k','75to100k']:
-        #         influencers_low_middle_income.append(agent)  ## influencers low income contains agents NOT unique_ids
+        #     if agent.income == 'less75k':
+        #         influencers_lowincome.append(agent)  ## influencers low income contains agents NOT unique_ids
 
         # ## seed 0.1% of these influencer agents
-        # seed_agents = influencers_low_middle_income[-sample_percentage:]
+        # seed_agents = influencers_lowincome[-sample_percentage:]
         # if len(seed_agents)>0:
         #     for agent in seed_agents:
         #         self.seeded_agents.append(agent.unique_id)  #keep the unique ids of each agent in this list for exporting
         #         #seed them: turn them into adopters 
         #         agent.adoption_status = 1          
-        # print('Finished Executing Scenario4C')
+        # print('Finished Seeding for 4B')
+
+
+        #### 4C. LOW & MIDDLE-INCOME GROUP SEEDING
+        print('Starting Scenario04-C')
+        sample_percentage = math.ceil(0.01*len(df))  ## modify parameter 
+
+        #for segregated network, we use betweenness centrality measure 
+        influencers_anygroup = nx.betweenness_centrality(self.social_network)
+        influencers_anygroup2=sorted(influencers_anygroup.items(), key=lambda x:x[1]) ## get all caseids of influencers
+        influencer_caseids = [influencers_anygroup2[i][0] for i in range(len(influencers_anygroup2))]
+        influencers_low_middle_income = []
+        for agent in influencer_caseids:
+            #agent = self.schedule._agents[influencer]  ##getting the agent by the unique_id 
+            if agent.income in ['less75k','75to100k']:
+                influencers_low_middle_income.append(agent)  ## influencers low income contains agents NOT unique_ids
+
+        ## seed 0.1% of these influencer agents
+        seed_agents = influencers_low_middle_income[-sample_percentage:]
+        if len(seed_agents)>0:
+            for agent in seed_agents:
+                self.seeded_agents.append(agent.unique_id)  #keep the unique ids of each agent in this list for exporting
+                #seed them: turn them into adopters 
+                agent.adoption_status = 1          
+        print('Finished Executing Scenario4C')
 
     def attitude_evolution(self):
         """
@@ -644,9 +644,9 @@ def model_run(filename):
     #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'
     rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'        
     outputfile = filename[83:]                              
-    sample.datacollector_df.to_csv(rootpath+'experiment/segregated/scenario4b_2pp/'+str(outputfile))
+    sample.datacollector_df.to_csv(rootpath+'experiment/segregated/scenario4c_1pp/'+str(outputfile))
     seeded_df['seeded_agents']=sample.seeded_agents
-    seeded_df.to_csv(rootpath+'experiment/segregated/scenario4b_2pp/seeds/'+str(outputfile))    
+    seeded_df.to_csv(rootpath+'experiment/segregated/scenario4c_1pp/seeds/'+str(outputfile))    
     print(f'Finished exporting for {filename[83:]}')
 
     
