@@ -318,7 +318,7 @@ class AdoptionModel(Model):
         #         agent.adoption_status=1
 
         # ##4C: LOW & MIDDLE INCOME GROUP INFLUENCERS SEEDING
-        sample_number = math.ceil(0.01*len(df))  ##number instead of percentage 
+        sample_number = math.ceil(0.02*len(df))  ##number instead of percentage 
         influencers_anygroup = nx.degree_centrality(self.social_network)
         influencers_anygroup2 = sorted(influencers_anygroup.items(), key=lambda x:x[1]) ## getting all influencers
         ##get caseids 
@@ -618,9 +618,9 @@ def model_run(filename):
     #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'                                       #mac 
     rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'        
     outputfile = filename[83:]                              
-    sample.datacollector_df.to_csv(rootpath+'experiment/integrated/scenario4c_1pp/'+str(outputfile))
+    sample.datacollector_df.to_csv(rootpath+'experiment/integrated/scenario4c_2pp/'+str(outputfile))
     #seeded_df['seeded_agents']= sample.seeded_agents
-    seeded_df.to_csv(rootpath+'experiment/integrated/scenario4c_1pp/seeds/'+str(outputfile))
+    seeded_df.to_csv(rootpath+'experiment/integrated/scenario4c_2pp/seeds/'+str(outputfile))
     print(f'Finished exporting for {filename[83:]}')
 
 
