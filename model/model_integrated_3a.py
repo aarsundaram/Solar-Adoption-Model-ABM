@@ -213,13 +213,13 @@ class AdoptionModel(Model):
 
         ## 3B: LOW & MIDDLE-INCOME GROUP SEEDING:
         # same sample percentage as above
-        sample_percentage = 0.02
-        low_middle_income_agents = [hh for hh in self.schedule.agents if hh.income in ['less75k','75to100k']]
-        seed_agents = random.choices(low_middle_income_agents, k=math.ceil(sample_percentage*len(df)))
-        if len(seed_agents)>0:
-            for agent in seed_agents:
-                self.seeded_agents.append(agent.unique_id)
-                agent.adoption_status = 1 
+        # sample_percentage = 0.02
+        # low_middle_income_agents = [hh for hh in self.schedule.agents if hh.income in ['less75k','75to100k']]
+        # seed_agents = random.choices(low_middle_income_agents, k=math.ceil(sample_percentage*len(df)))
+        # if len(seed_agents)>0:
+        #     for agent in seed_agents:
+        #         self.seeded_agents.append(agent.unique_id)
+        #         agent.adoption_status = 1 
 
 
 
@@ -279,23 +279,23 @@ class AdoptionModel(Model):
             # agent.circle2 = bgid_neighs
             # agent.circle3= thirdcircle
             # agent.circle1 = circle1
-
+            pass
         
         ## TODO: SCENARIO-04 : Seeding Influencers 
 
         ## 4A: Seeding Influencers randomly (from any income group)
-        # sample_number = math.ceil(0.02*len(df))  ##number instead of percentage 
-        # print('beginning scenario-04')
-        # #using degree centrality as a measure of influence in an integrated network 
-        # influencers_anygroup = nx.degree_centrality(self.social_network)
-        # influencers_anygroup2 = sorted(influencers_anygroup.items(), key=lambda x:x[1]) ## getting all influencers 
-        # influencer_caseids = [influencers_anygroup2[i][0] for i in range(len(influencers_anygroup2))][-sample_number:]
-        # print('len of influencer caseids',len(influencer_caseids))
-        # for agent in influencer_caseids:
-        #     #agent = self.schedule._agents[influencer]
-        #     self.seeded_agents.append(agent.unique_id)
-        #     agent.adoption_status =1 
-        # print('finished seeding')
+        sample_number = math.ceil(0.02*len(df))  ##number instead of percentage 
+        print('beginning scenario-04')
+        #using degree centrality as a measure of influence in an integrated network 
+        influencers_anygroup = nx.degree_centrality(self.social_network)
+        influencers_anygroup2 = sorted(influencers_anygroup.items(), key=lambda x:x[1]) ## getting all influencers 
+        influencer_caseids = [influencers_anygroup2[i][0] for i in range(len(influencers_anygroup2))][-sample_number:]
+        print('len of influencer caseids',len(influencer_caseids))
+        for agent in influencer_caseids:
+            #agent = self.schedule._agents[influencer]
+            self.seeded_agents.append(agent.unique_id)
+            agent.adoption_status =1 
+        print('finished seeding')
 
         
         # ##4B: LOW-INCOME GROUP INFLUENCERS SEEDING
@@ -620,7 +620,7 @@ def model_run(filename):
     outputfile = filename[83:]                              
     #sample.datacollector_df.to_csv(rootpath+'experiment/integrated/scenario3a_2pp/'+str(outputfile))
     seeded_df['seeded_agents']= sample.seeded_agents
-    seeded_df.to_csv(rootpath+'experiment/integrated/scenario3b_2pp/seeds/'+str(outputfile))
+    seeded_df.to_csv(rootpath+'experiment/integrated/scenario4a_2pp/seeds/'+str(outputfile))
     print(f'Finished exporting for {filename[83:]}')
 
 
