@@ -169,27 +169,27 @@ class AdoptionModel(Model):
                 self.G.add_node(agent, label=agent.unique_id)   # main graph holds all agent nodes
                 
 
-                #preparing dictioanries that will enable interactions 
-                self.all_households.append(agent)
-                self.geoid_dict[agent.geoid].append(agent)
-                self.bgid_dict[agent.bgid].append(agent)
+                # #preparing dictioanries that will enable interactions 
+                # self.all_households.append(agent)
+                # self.geoid_dict[agent.geoid].append(agent)
+                # self.bgid_dict[agent.bgid].append(agent)
                 
-                # preparing tpb dictionaries
-                self.attitude_dict[agent]={}
-                self.attitude_dict[agent][self.schedule.steps]= []
-                self.attitude_dict[agent][self.schedule.steps].append(agent.attitude)
+                # # preparing tpb dictionaries
+                # self.attitude_dict[agent]={}
+                # self.attitude_dict[agent][self.schedule.steps]= []
+                # self.attitude_dict[agent][self.schedule.steps].append(agent.attitude)
 
-                self.attitude_uncertainty_dict[agent]={}
-                self.attitude_uncertainty_dict[agent][self.schedule.steps]=[]
-                self.attitude_uncertainty_dict[agent][self.schedule.steps].append(agent.attitude_uncertainty)  #update with initialized value for timestep 0
+                # self.attitude_uncertainty_dict[agent]={}
+                # self.attitude_uncertainty_dict[agent][self.schedule.steps]=[]
+                # self.attitude_uncertainty_dict[agent][self.schedule.steps].append(agent.attitude_uncertainty)  #update with initialized value for timestep 0
  
-                self.pbc_dict[agent]={}
-                self.pbc_dict[agent][self.schedule.steps]= []
-                self.pbc_dict[agent][self.schedule.steps].append(agent.pbc)  
+                # self.pbc_dict[agent]={}
+                # self.pbc_dict[agent][self.schedule.steps]= []
+                # self.pbc_dict[agent][self.schedule.steps].append(agent.pbc)  
 
-                self.subnorms_dict[agent]={}
-                self.subnorms_dict[agent][self.schedule.steps]= []
-                self.subnorms_dict[agent][self.schedule.steps].append(agent.subnorms)        
+                # self.subnorms_dict[agent]={}
+                # self.subnorms_dict[agent][self.schedule.steps]= []
+                # self.subnorms_dict[agent][self.schedule.steps].append(agent.subnorms)        
 
 
         # #TODO: Scenario5: random seeding
@@ -202,7 +202,7 @@ class AdoptionModel(Model):
         #TODO: Scenario-03: Seed Individuals by income-group 
 
         ## 3A : LOW INCOME GROUP SEEDING
-        sample_percentage = 0.01 ## modify this
+        sample_percentage = 0.02 ## modify this
         #get agents in the tract who are low income. then sample from 0.1% of them 
         low_income_agents = [hh for hh in self.schedule.agents if hh.income=='less75k']
         seed_agents = random.choices(low_income_agents, k=math.ceil(sample_percentage*len(df)))
@@ -232,53 +232,53 @@ class AdoptionModel(Model):
         # after all the agents have been initialized, now give them coregroups
         for agent in self.schedule.agents:
             
-            #geolinks at geoid level
-            #initialize upto 10 neighs that will be in their network
-            neighs = random.choices(self.geoid_dict[agent.geoid],k=min(len(self.geoid_dict[agent.geoid]),10))
-            neighs = [i for i in neighs if i!=agent]
-            for neigh in neighs:
-                self.social_network.add_edge(agent,neigh)
+            # #geolinks at geoid level
+            # #initialize upto 10 neighs that will be in their network
+            # neighs = random.choices(self.geoid_dict[agent.geoid],k=min(len(self.geoid_dict[agent.geoid]),10))
+            # neighs = [i for i in neighs if i!=agent]
+            # for neigh in neighs:
+            #     self.social_network.add_edge(agent,neigh)
             
-            #circle2 at bgid level 
-            #initialize upto 50 of them who will be in their network.
-            # they will actually interact with just 15 of them max every month
-            bgid_neighs = random.choices(self.bgid_dict[agent.bgid],k=min(50,len(self.bgid_dict[agent.bgid])))
-            bgid_neighs = [i for i in bgid_neighs if i!=agent]
+            # #circle2 at bgid level 
+            # #initialize upto 50 of them who will be in their network.
+            # # they will actually interact with just 15 of them max every month
+            # bgid_neighs = random.choices(self.bgid_dict[agent.bgid],k=min(50,len(self.bgid_dict[agent.bgid])))
+            # bgid_neighs = [i for i in bgid_neighs if i!=agent]
 
-            #add 3 from these permanently to circle1
-            circle1 = random.choices(bgid_neighs,k=min(3,len(bgid_neighs)))
-            #remove these core members from the bgid_neighs to prevent double interaction
-            bgid_neighs = [i for i in bgid_neighs if i not in circle1]
-            for bgid_neigh in bgid_neighs:
-                self.social_network.add_edge(agent,bgid_neigh)
+            # #add 3 from these permanently to circle1
+            # circle1 = random.choices(bgid_neighs,k=min(3,len(bgid_neighs)))
+            # #remove these core members from the bgid_neighs to prevent double interaction
+            # bgid_neighs = [i for i in bgid_neighs if i not in circle1]
+            # for bgid_neigh in bgid_neighs:
+            #     self.social_network.add_edge(agent,bgid_neigh)
 
 
 
-            #circle3 at albany level
-            #initialize upto 200 of them.
-            #although at every timestep, an agent interacts only with upto 20 of them
-            thirdcircle = random.choices(self.all_households,k=200)
-            thirdcircle = [i for i in thirdcircle if i!=agent]
-            #adding 2 from these permanently to core group
-            circle1 = circle1+ random.choices(thirdcircle, k=min(2,len(thirdcircle)))
-            thirdcircle = [i for i in thirdcircle if i not in circle1]
+            # #circle3 at albany level
+            # #initialize upto 200 of them.
+            # #although at every timestep, an agent interacts only with upto 20 of them
+            # thirdcircle = random.choices(self.all_households,k=200)
+            # thirdcircle = [i for i in thirdcircle if i!=agent]
+            # #adding 2 from these permanently to core group
+            # circle1 = circle1+ random.choices(thirdcircle, k=min(2,len(thirdcircle)))
+            # thirdcircle = [i for i in thirdcircle if i not in circle1]
 
-            for i in thirdcircle:
-                if i not in list(self.G.nodes()):
-                    self.G.add_node(i)
+            # for i in thirdcircle:
+            #     if i not in list(self.G.nodes()):
+            #         self.G.add_node(i)
             
-            for hh in thirdcircle:
-                self.social_network.add_edge(agent,hh)
+            # for hh in thirdcircle:
+            #     self.social_network.add_edge(agent,hh)
 
-            for core in circle1:
-                self.social_network.add_edge(agent,core) 
+            # for core in circle1:
+            #     self.social_network.add_edge(agent,core) 
                 
-            # initializing the networks.
-            #no edges at this stage. only at the attitude evolution step
-            agent.geolinks = neighs
-            agent.circle2 = bgid_neighs
-            agent.circle3= thirdcircle
-            agent.circle1 = circle1
+            # # initializing the networks.
+            # #no edges at this stage. only at the attitude evolution step
+            # agent.geolinks = neighs
+            # agent.circle2 = bgid_neighs
+            # agent.circle3= thirdcircle
+            # agent.circle1 = circle1
 
         
         ## TODO: SCENARIO-04 : Seeding Influencers 
@@ -336,210 +336,210 @@ class AdoptionModel(Model):
         #         self.seeded_agents.append(agent.unique_id)
         #         agent.adoption_status=1       
 
-    def attitude_evolution(self):
-        """
-        Using the relative aggreement algorithm, model interactions between agents at:
-        - block level (physical interactions bound by geography)
-        - socioeconomic level (interactions within different circles of the agent)
-        """
+    # def attitude_evolution(self):
+    #     """
+    #     Using the relative aggreement algorithm, model interactions between agents at:
+    #     - block level (physical interactions bound by geography)
+    #     - socioeconomic level (interactions within different circles of the agent)
+    #     """
 
-        #At every timestep, go through every agent, get their 4 circles
-        # create random interactions within their social networks 
-        # store these interactions in "interactions"
-        # return this to the model
-        # in a for-loop, the model goes through every interaction and updates opinions
-        interactions = []
+    #     #At every timestep, go through every agent, get their 4 circles
+    #     # create random interactions within their social networks 
+    #     # store these interactions in "interactions"
+    #     # return this to the model
+    #     # in a for-loop, the model goes through every interaction and updates opinions
+    #     interactions = []
 
-        def add_and_remove_edges(G, p_new_connection, p_remove_connection):    
+    #     def add_and_remove_edges(G, p_new_connection, p_remove_connection):    
             """
-            where:
-            G : input graph 
-            p_new_connection: probability of forming new connection
-            p_remove_connection: probability of removing existing connection
+        #     where:
+        #     G : input graph 
+        #     p_new_connection: probability of forming new connection
+        #     p_remove_connection: probability of removing existing connection
 
-            returns: rem_edges, new_edges
-            rem_edges : list of edges removed
-            new_edges : list of edges formed 
+        #     returns: rem_edges, new_edges
+        #     rem_edges : list of edges removed
+        #     new_edges : list of edges formed 
 
-            """ 
+        #     """ 
 
-            new_edges = []    
-            rem_edges = [] 
+        #     new_edges = []    
+        #     rem_edges = [] 
 
-            for node in G.nodes():    
-                # find the other nodes this one is connected to    
-                connected = [to for (fr, to) in G.edges(node)]    
-                # and find the remainder of nodes, which are candidates for new edges   
-                unconnected = [n for n in G.nodes() if not n in connected]    
+        #     for node in G.nodes():    
+        #         # find the other nodes this one is connected to    
+        #         connected = [to for (fr, to) in G.edges(node)]    
+        #         # and find the remainder of nodes, which are candidates for new edges   
+        #         unconnected = [n for n in G.nodes() if not n in connected]    
 
-                # probabilistically add a random edge    
-                if len(unconnected): # only try if new edge is possible    
-                    if random.random() < p_new_connection:    
-                        new = random.choice(unconnected)    
-                        G.add_edge(node, new)    
-                        #print("\tnew edge:\t {} -- {}".format(node, new)    
-                        new_edges.append( (node, new) )    
-                        # book-keeping, in case both add and remove done in same cycle  
-                        unconnected.remove(new)    
-                        connected.append(new)    
+        #         # probabilistically add a random edge    
+        #         if len(unconnected): # only try if new edge is possible    
+        #             if random.random() < p_new_connection:    
+        #                 new = random.choice(unconnected)    
+        #                 G.add_edge(node, new)    
+        #                 #print("\tnew edge:\t {} -- {}".format(node, new)    
+        #                 new_edges.append( (node, new) )    
+        #                 # book-keeping, in case both add and remove done in same cycle  
+        #                 unconnected.remove(new)    
+        #                 connected.append(new)    
 
-                # probabilistically remove a random edge    
-                if len(connected): # only try if an edge exists to remove    
-                    if random.random() < p_remove_connection:    
-                        remove = random.choice(connected)    
-                        G.remove_edge(node, remove)    
-                        #print "\tedge removed:\t {} -- {}".format(node, remove)    
-                        rem_edges.append( (node, remove) )    
-                        # book-keeping, in case lists are important later?    
-                        connected.remove(remove)    
-                        unconnected.append(remove)    
-            return rem_edges, new_edges
+        #         # probabilistically remove a random edge    
+        #         if len(connected): # only try if an edge exists to remove    
+        #             if random.random() < p_remove_connection:    
+        #                 remove = random.choice(connected)    
+        #                 G.remove_edge(node, remove)    
+        #                 #print "\tedge removed:\t {} -- {}".format(node, remove)    
+        #                 rem_edges.append( (node, remove) )    
+        #                 # book-keeping, in case lists are important later?    
+        #                 connected.remove(remove)    
+        #                 unconnected.append(remove)    
+        #     return rem_edges, new_edges
 
 
-        def ra_implementation(a,b, mu=0.2):
-            """
-            where:
-            a = first mesa agent in the interactions pair
-            b = second mesa agent in the interactions pair
+        # def ra_implementation(a,b, mu=0.2):
+        #     """
+        #     where:
+        #     a = first mesa agent in the interactions pair
+        #     b = second mesa agent in the interactions pair
             
-            returns: attitude (float64) of first agent, attitude of second agent
+        #     returns: attitude (float64) of first agent, attitude of second agent
 
-            """
-            ## DONE : add the uncertainty values from a V-shaped map that is derived from the 
-            ## agent's attitude itself. If extreme, more certain. Centrist: more uncertain.
+        #     """
+        #     ## DONE : add the uncertainty values from a V-shaped map that is derived from the 
+        #     ## agent's attitude itself. If extreme, more certain. Centrist: more uncertain.
 
-            if a.adoption_status==1:
-                mu = 0.5  #intensity of interactions is more if a is an adopter
-            else:
-                mu=0.2
-                        # TODO: sensitivity analysis on this variable 
-            #print('a:',a.unique_id,'b',b.unique_id)
+        #     if a.adoption_status==1:
+        #         mu = 0.5  #intensity of interactions is more if a is an adopter
+        #     else:
+        #         mu=0.2
+        #                 # TODO: sensitivity analysis on this variable 
+        #     #print('a:',a.unique_id,'b',b.unique_id)
 
-            h_ij=0
-            #x_i= a.attitude
-            x_i = self.attitude_dict[a][self.schedule.steps][-1]
-            #print('initial x_i', x_i)
-            #u_i= a.attitude_uncertainty   ## DONE: this also has to be initialized at the very beginning for this to change. 
-            u_i = self.attitude_uncertainty_dict[a][self.schedule.steps][-1]
+        #     h_ij=0
+        #     #x_i= a.attitude
+        #     x_i = self.attitude_dict[a][self.schedule.steps][-1]
+        #     #print('initial x_i', x_i)
+        #     #u_i= a.attitude_uncertainty   ## DONE: this also has to be initialized at the very beginning for this to change. 
+        #     u_i = self.attitude_uncertainty_dict[a][self.schedule.steps][-1]
 
-            #x_j= b.attitude
-            x_j = self.attitude_dict[b][self.schedule.steps][-1]
-            #print('initial x_j', x_j)
-            #u_j= b.attitude_uncertainty
-            u_j =  self.attitude_uncertainty_dict[b][self.schedule.steps][-1] 
+        #     #x_j= b.attitude
+        #     x_j = self.attitude_dict[b][self.schedule.steps][-1]
+        #     #print('initial x_j', x_j)
+        #     #u_j= b.attitude_uncertainty
+        #     u_j =  self.attitude_uncertainty_dict[b][self.schedule.steps][-1] 
 
 
 
-            h_ij=min(x_i+u_i, x_j+u_j) - max(x_i-u_i, x_j-u_j)
+        #     h_ij=min(x_i+u_i, x_j+u_j) - max(x_i-u_i, x_j-u_j)
 
-            if(h_ij>u_i):
+        #     if(h_ij>u_i):
                 
-                relagree=(h_ij/u_i)-1
-                #print('relagree', relagree)
-                delta_x_j=mu*relagree*(x_i-x_j)
-                #print('delta_x_j:', delta_x_j)
-                delta_u_j=mu*relagree*(u_i-u_j)
-                #print('delta_u_j',delta_u_j)
-                x_j=x_j+delta_x_j
-                #print('new x_j:', x_j)
-                u_j=u_j+delta_u_j
-                #print('new x_i', x_i)
+        #         relagree=(h_ij/u_i)-1
+        #         #print('relagree', relagree)
+        #         delta_x_j=mu*relagree*(x_i-x_j)
+        #         #print('delta_x_j:', delta_x_j)
+        #         delta_u_j=mu*relagree*(u_i-u_j)
+        #         #print('delta_u_j',delta_u_j)
+        #         x_j=x_j+delta_x_j
+        #         #print('new x_j:', x_j)
+        #         u_j=u_j+delta_u_j
+        #         #print('new x_i', x_i)
                 
-                #print('x_i,  x_j =', x_i, x_j )
-                #print('timestep:',self.schedule.steps,'\n')
-                #print("influence! dx, du=",delta_x_j,delta_u_j)
+        #         #print('x_i,  x_j =', x_i, x_j )
+        #         #print('timestep:',self.schedule.steps,'\n')
+        #         #print("influence! dx, du=",delta_x_j,delta_u_j)
 
-            #opinions change only for non-adopters 
-                #updating uncertainty of b
-                self.attitude_uncertainty_dict[b][self.schedule.steps].append(u_j)
+        #     #opinions change only for non-adopters 
+        #         #updating uncertainty of b
+        #         self.attitude_uncertainty_dict[b][self.schedule.steps].append(u_j)
 
-            return x_i,x_j
+        #     return x_i,x_j
 
 
-        def circles_of_influence(interaction,mu=0.2):
+ #       def circles_of_influence(interaction,mu=0.2):
             
             ## making it directional on adopters # TODO: just marking for easy access. 
-            if (interaction[0].adoption_status ==1) and (interaction[1].adoption_status==1): #if both agents are adopters, no need RA-implementation
+        #     if (interaction[0].adoption_status ==1) and (interaction[1].adoption_status==1): #if both agents are adopters, no need RA-implementation
 
-                self.attitude_dict[interaction[0]][self.schedule.steps].append(self.attitude_dict[interaction[0]][self.schedule.steps][-1])   #value remains the same basically, no change
-                self.attitude_dict[interaction[1]][self.schedule.steps].append(self.attitude_dict[interaction[1]][self.schedule.steps][-1])   #value remains the same basically, no change
+        #         self.attitude_dict[interaction[0]][self.schedule.steps].append(self.attitude_dict[interaction[0]][self.schedule.steps][-1])   #value remains the same basically, no change
+        #         self.attitude_dict[interaction[1]][self.schedule.steps].append(self.attitude_dict[interaction[1]][self.schedule.steps][-1])   #value remains the same basically, no change
 
-                print('Time step:', self.schedule.steps,',both', interaction[0].unique_id,'and',interaction[1].unique_id,'are adopters, no change in opinions!')
+        #         print('Time step:', self.schedule.steps,',both', interaction[0].unique_id,'and',interaction[1].unique_id,'are adopters, no change in opinions!')
 
 
-            if (interaction[0].adoption_status==1) and (interaction[1].adoption_status==0): 
-                first_agent = interaction[0]
-                second_agent = interaction[1]
+        #     if (interaction[0].adoption_status==1) and (interaction[1].adoption_status==0): 
+        #         first_agent = interaction[0]
+        #         second_agent = interaction[1]
                 
-                first_agent_initial_attitude = self.attitude_dict[first_agent][self.schedule.steps][-1]
-                second_agent_initial_attitude= self.attitude_dict[second_agent][self.schedule.steps][-1]
+        #         first_agent_initial_attitude = self.attitude_dict[first_agent][self.schedule.steps][-1]
+        #         second_agent_initial_attitude= self.attitude_dict[second_agent][self.schedule.steps][-1]
 
-                first_agent_new_attitude, second_agent_new_attitude = ra_implementation(first_agent,second_agent, mu)
-                self.attitude_dict[first_agent][self.schedule.steps].append(first_agent_new_attitude)
-                self.attitude_dict[second_agent][self.schedule.steps].append(second_agent_new_attitude) 
+        #         first_agent_new_attitude, second_agent_new_attitude = ra_implementation(first_agent,second_agent, mu)
+        #         self.attitude_dict[first_agent][self.schedule.steps].append(first_agent_new_attitude)
+        #         self.attitude_dict[second_agent][self.schedule.steps].append(second_agent_new_attitude) 
                 
-            else:
-                first_agent = interaction[1]
-                second_agent= interaction[0]
+        #     else:
+        #         first_agent = interaction[1]
+        #         second_agent= interaction[0]
 
-                first_agent_initial_attitude = self.attitude_dict[first_agent][self.schedule.steps][-1]
-                second_agent_initial_attitude= self.attitude_dict[second_agent][self.schedule.steps][-1]
+        #         first_agent_initial_attitude = self.attitude_dict[first_agent][self.schedule.steps][-1]
+        #         second_agent_initial_attitude= self.attitude_dict[second_agent][self.schedule.steps][-1]
 
-                first_agent_new_attitude, second_agent_new_attitude = ra_implementation(first_agent,second_agent, mu)
-                self.attitude_dict[first_agent][self.schedule.steps].append(first_agent_new_attitude)
-                self.attitude_dict[second_agent][self.schedule.steps].append(second_agent_new_attitude) 
+        #         first_agent_new_attitude, second_agent_new_attitude = ra_implementation(first_agent,second_agent, mu)
+        #         self.attitude_dict[first_agent][self.schedule.steps].append(first_agent_new_attitude)
+        #         self.attitude_dict[second_agent][self.schedule.steps].append(second_agent_new_attitude) 
 
             
-        for agent in self.schedule.agents:
-            tempG = nx.Graph()
-            for i in random.choices(agent.geolinks,k=min(len(agent.geolinks),5)):
-                tempG.add_edge(agent,i)
-            for edge in list(tempG.edges()):
-                circles_of_influence(edge,mu=0.2)
+        # for agent in self.schedule.agents:
+        #     tempG = nx.Graph()
+        #     for i in random.choices(agent.geolinks,k=min(len(agent.geolinks),5)):
+        #         tempG.add_edge(agent,i)
+        #     for edge in list(tempG.edges()):
+        #         circles_of_influence(edge,mu=0.2)
 
-            tempG = nx.Graph()
-            for i in agent.circle1:
-                tempG.add_edge(agent,i)
-            for edge in list(tempG.edges()):
-                circles_of_influence(edge,mu=0.5)
+        #     tempG = nx.Graph()
+        #     for i in agent.circle1:
+        #         tempG.add_edge(agent,i)
+        #     for edge in list(tempG.edges()):
+        #         circles_of_influence(edge,mu=0.5)
 
-            tempG = nx.Graph()
-            for i in random.choices(agent.circle2, k=min(15,len(agent.circle2))):
-                tempG.add_edge(agent,i)
-            for edge in list(tempG.edges()):
-                circles_of_influence(edge, mu=0.1)
+        #     tempG = nx.Graph()
+        #     for i in random.choices(agent.circle2, k=min(15,len(agent.circle2))):
+        #         tempG.add_edge(agent,i)
+        #     for edge in list(tempG.edges()):
+        #         circles_of_influence(edge, mu=0.1)
 
-            tempG = nx.Graph()
-            for i in random.choices(agent.circle3,k=min(20,len(agent.circle3))):
-                tempG.add_edge(agent,i)
-            for edge in list(tempG.edges()):
-                circles_of_influence(edge,mu=0.05)
+        #     tempG = nx.Graph()
+        #     for i in random.choices(agent.circle3,k=min(20,len(agent.circle3))):
+        #         tempG.add_edge(agent,i)
+        #     for edge in list(tempG.edges()):
+        #         circles_of_influence(edge,mu=0.05)
 
 
-    def subnorms_evolution(self):
+#    def subnorms_evolution(self):
         """
         Modelling the influence of adopters in the block, on adoption decisions of other block residents
 
-        """ 
-        for household in self.schedule.agents:
-            # get the number of adopters in the household's block
-            adopters_in_block = []
-            for hh in self.geoid_dict[household.geoid]:
-                if hh.adoption_status==1:
-                    adopters_in_block.append(hh)
-                    self.subnorms_dict[hh][self.schedule.steps].append(1)
+        # """ 
+        # for household in self.schedule.agents:
+        #     # get the number of adopters in the household's block
+        #     adopters_in_block = []
+        #     for hh in self.geoid_dict[household.geoid]:
+        #         if hh.adoption_status==1:
+        #             adopters_in_block.append(hh)
+        #             self.subnorms_dict[hh][self.schedule.steps].append(1)
 
-            if household.adoption_status==0:
-                if len(adopters_in_block) > (0.33 * len(self.geoid_dict[household.geoid])): 
-                    self.subnorms_dict[household][self.schedule.steps].append(min(household.subnorms+0.5,1))       
-                                            ## if more than one-third of the neighbors have a solar panel on their roof, 
-                                            ## the household's subnorms becomes increases by 0.5 
-                                            ## any scientific explanation for the threshold? 
-                if len(adopters_in_block) > (0.5 * len(self.geoid_dict[household.geoid])): 
-                    self.subnorms_dict[household][self.schedule.steps].append(1)                
-                                            ## if more than 1/2 of the neighbors have a solar panel on their roof, 
-                                            ## the household's subnorms becomes increases to 1 
-                                            ## any scientific explanation for the threshold? 
+        #     if household.adoption_status==0:
+        #         if len(adopters_in_block) > (0.33 * len(self.geoid_dict[household.geoid])): 
+        #             self.subnorms_dict[household][self.schedule.steps].append(min(household.subnorms+0.5,1))       
+        #                                     ## if more than one-third of the neighbors have a solar panel on their roof, 
+        #                                     ## the household's subnorms becomes increases by 0.5 
+        #                                     ## any scientific explanation for the threshold? 
+        #         if len(adopters_in_block) > (0.5 * len(self.geoid_dict[household.geoid])): 
+        #             self.subnorms_dict[household][self.schedule.steps].append(1)                
+        #                                     ## if more than 1/2 of the neighbors have a solar panel on their roof, 
+        #                                     ## the household's subnorms becomes increases to 1 
+        #                                     ## any scientific explanation for the threshold? 
         
 
     def step(self):
@@ -552,52 +552,52 @@ class AdoptionModel(Model):
         #print(self.schedule.steps)
         print('Timestep:', self.schedule.steps)
 
-        if self.schedule.steps!=0:
-            for agent in self.schedule.agents:
-                #create entry for new time step and initialize it with updated value from previous timestep 
-                self.attitude_dict[agent][self.schedule.steps]= []
-                self.attitude_dict[agent][self.schedule.steps].append(self.attitude_dict[agent][self.schedule.steps - 1][-1])
+        # if self.schedule.steps!=0:
+        #     for agent in self.schedule.agents:
+        #         #create entry for new time step and initialize it with updated value from previous timestep 
+        #         self.attitude_dict[agent][self.schedule.steps]= []
+        #         self.attitude_dict[agent][self.schedule.steps].append(self.attitude_dict[agent][self.schedule.steps - 1][-1])
 
-                self.attitude_uncertainty_dict[agent][self.schedule.steps]= []
-                self.attitude_uncertainty_dict[agent][self.schedule.steps].append(self.attitude_uncertainty_dict[agent][self.schedule.steps - 1][-1])
+        #         self.attitude_uncertainty_dict[agent][self.schedule.steps]= []
+        #         self.attitude_uncertainty_dict[agent][self.schedule.steps].append(self.attitude_uncertainty_dict[agent][self.schedule.steps - 1][-1])
 
-                self.pbc_dict[agent][self.schedule.steps]= []
-                self.pbc_dict[agent][self.schedule.steps].append(self.pbc_dict[agent][self.schedule.steps - 1][-1])
+        #         self.pbc_dict[agent][self.schedule.steps]= []
+        #         self.pbc_dict[agent][self.schedule.steps].append(self.pbc_dict[agent][self.schedule.steps - 1][-1])
 
-                self.subnorms_dict[agent][self.schedule.steps]= []
-                self.subnorms_dict[agent][self.schedule.steps].append(self.subnorms_dict[agent][self.schedule.steps - 1][-1])
+        #         self.subnorms_dict[agent][self.schedule.steps]= []
+        #         self.subnorms_dict[agent][self.schedule.steps].append(self.subnorms_dict[agent][self.schedule.steps - 1][-1])
         
 
-        self.attitude_evolution()
+        # self.attitude_evolution()
         
-        #pool = ProcessingPool(4)
-        #results= pool.map(self.circles_of_influence, [interaction for interaction in interactions], chunksize=50) 
-        self.subnorms_evolution() 
+        # #pool = ProcessingPool(4)
+        # #results= pool.map(self.circles_of_influence, [interaction for interaction in interactions], chunksize=50) 
+        # self.subnorms_evolution() 
 
-        ## after updating all three TPB attributes, calculate the intention with the latest values of tpb attributes
-        for household in self.schedule.agents:
-            household.attitude = self.attitude_dict[household][self.schedule.steps][-1]
-            household.pbc = self.pbc_dict[household][self.schedule.steps][-1]
-            household.subnorms = self.subnorms_dict[household][self.schedule.steps][-1]
+        # ## after updating all three TPB attributes, calculate the intention with the latest values of tpb attributes
+        # for household in self.schedule.agents:
+        #     household.attitude = self.attitude_dict[household][self.schedule.steps][-1]
+        #     household.pbc = self.pbc_dict[household][self.schedule.steps][-1]
+        #     household.subnorms = self.subnorms_dict[household][self.schedule.steps][-1]
 
-            # calculating updated intention 
-            household.intention = self.tpb_constant+ (self.pbc_weight * household.pbc) + (self.att_weight * household.attitude) + (self.sn_weight * household.subnorms)
+        #     # calculating updated intention 
+        #     household.intention = self.tpb_constant+ (self.pbc_weight * household.pbc) + (self.att_weight * household.attitude) + (self.sn_weight * household.subnorms)
 
-            # check both thresholds:
-            if self.schedule.steps <= 1: 
-                if household.intention >= 0.80:
-                    household.adoption_status = 1
-            else:
-                if (household.intention >= self.intention_threshold[self.schedule.steps]) and (household.pbc>=0.8):
-                    household.adoption_status = 1 
+        #     # check both thresholds:
+        #     if self.schedule.steps <= 1: 
+        #         if household.intention >= 0.80:
+        #             household.adoption_status = 1
+        #     else:
+        #         if (household.intention >= self.intention_threshold[self.schedule.steps]) and (household.pbc>=0.8):
+        #             household.adoption_status = 1 
             
-            ## log everything into a dictionary which collects data:
-            new_record = {'timestep':self.schedule.steps,'case_id':household.unique_id,'attitude':household.attitude,\
-                            'subnorms':household.subnorms,'pbc':household.pbc,'intention':household.intention,'adoption_status':household.adoption_status,\
-                            'tolerated_payback':household.ToleratedPayBackPeriod,'actualpayback':household.SimplePayBackPeriod,'geoid':household.geoid}
+        #     ## log everything into a dictionary which collects data:
+        #     new_record = {'timestep':self.schedule.steps,'case_id':household.unique_id,'attitude':household.attitude,\
+        #                     'subnorms':household.subnorms,'pbc':household.pbc,'intention':household.intention,'adoption_status':household.adoption_status,\
+        #                     'tolerated_payback':household.ToleratedPayBackPeriod,'actualpayback':household.SimplePayBackPeriod,'geoid':household.geoid}
                             
-            self.datacollector_df = self.datacollector_df.append(new_record, ignore_index=True)
-        print('end of step', self.schedule.steps)
+        #     self.datacollector_df = self.datacollector_df.append(new_record, ignore_index=True)
+        # print('end of step', self.schedule.steps)
                     
 
 ################################################################################################################
@@ -618,9 +618,9 @@ def model_run(filename):
     #rootpath= '/Users/rtseinstein/Documents/GitHub/Solar-Adoption-Model-ABM/'                                       #mac 
     rootpath = '/home/nfs/ameenakshisund/abm/Solar-Adoption-Model-ABM/'        
     outputfile = filename[83:]                              
-    sample.datacollector_df.to_csv(rootpath+'experiment/integrated/scenario3a_1pp/'+str(outputfile))
+    #sample.datacollector_df.to_csv(rootpath+'experiment/integrated/scenario3a_2pp/'+str(outputfile))
     seeded_df['seeded_agents']= sample.seeded_agents
-    seeded_df.to_csv(rootpath+'experiment/integrated/scenario3a_1pp/seeds/'+str(outputfile))
+    seeded_df.to_csv(rootpath+'experiment/integrated/scenario3a_2pp/seeds/'+str(outputfile))
     print(f'Finished exporting for {filename[83:]}')
 
 
