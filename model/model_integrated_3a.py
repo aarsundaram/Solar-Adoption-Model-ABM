@@ -193,11 +193,11 @@ class AdoptionModel(Model):
 
 
         # #TODO: Scenario5: random seeding
-        # seed_agents = random.choices(self.schedule.agents,k=math.ceil(0.01*len(df)))
-        # if len(seed_agents)>0:
-        #     for agent in seed_agents:
-        #         self.seeded_agents.append(agent.unique_id)
-        #         agent.adoption_status = 1
+        seed_agents = random.choices(self.schedule.agents,k=math.ceil(0.02*len(df)))
+        if len(seed_agents)>0:
+            for agent in seed_agents:
+                self.seeded_agents.append(agent.unique_id)
+                agent.adoption_status = 1
 
         #TODO: Scenario-03: Seed Individuals by income-group 
 
@@ -318,23 +318,23 @@ class AdoptionModel(Model):
         #         agent.adoption_status=1
 
         # ##4C: LOW & MIDDLE INCOME GROUP INFLUENCERS SEEDING
-        sample_number = math.ceil(0.02*len(df))  ##number instead of percentage 
-        influencers_anygroup = nx.degree_centrality(self.social_network)
-        influencers_anygroup2 = sorted(influencers_anygroup.items(), key=lambda x:x[1]) ## getting all influencers
-        ##get caseids 
-        influencer_caseids = [influencers_anygroup2[i][0] for i in range(len(influencers_anygroup2))]
-        influencers_low_middle_income = []
-        for agent in influencer_caseids:
-            #agent = self.schedule._agents[influencer]
-            if agent.income in ['less75k','75to100k']:
-                influencers_low_middle_income.append(agent)
+        # sample_number = math.ceil(0.02*len(df))  ##number instead of percentage 
+        # influencers_anygroup = nx.degree_centrality(self.social_network)
+        # influencers_anygroup2 = sorted(influencers_anygroup.items(), key=lambda x:x[1]) ## getting all influencers
+        # ##get caseids 
+        # influencer_caseids = [influencers_anygroup2[i][0] for i in range(len(influencers_anygroup2))]
+        # influencers_low_middle_income = []
+        # for agent in influencer_caseids:
+        #     #agent = self.schedule._agents[influencer]
+        #     if agent.income in ['less75k','75to100k']:
+        #         influencers_low_middle_income.append(agent)
 
-        ##seed 0.1% of the agents (of the sample number size)
-        seed_agents = influencers_low_middle_income[-sample_number:]
-        if len(seed_agents)>0:
-            for agent in seed_agents:
-                self.seeded_agents.append(agent.unique_id)
-                agent.adoption_status=1       
+        # ##seed 0.1% of the agents (of the sample number size)
+        # seed_agents = influencers_low_middle_income[-sample_number:]
+        # if len(seed_agents)>0:
+        #     for agent in seed_agents:
+        #         self.seeded_agents.append(agent.unique_id)
+        #         agent.adoption_status=1       
 
     # def attitude_evolution(self):
     #     """
@@ -620,7 +620,7 @@ def model_run(filename):
     outputfile = filename[83:]                              
     #sample.datacollector_df.to_csv(rootpath+'experiment/integrated/scenario3a_2pp/'+str(outputfile))
     seeded_df['seeded_agents']= sample.seeded_agents
-    seeded_df.to_csv(rootpath+'experiment/integrated/scenario4c_2pp/seeds/'+str(outputfile))
+    seeded_df.to_csv(rootpath+'experiment/integrated/scenario5_2pp/seeds/'+str(outputfile))
     print(f'Finished exporting for {filename[83:]}')
 
 
